@@ -213,6 +213,24 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def next_line_has_noncomment_label(lines, next_line_index):
+    """
+    Check whether the next line is present, not fully commented, and contains a label.
+
+    :param lines: List of lines for the file
+    :param next_line_index: Index of the next line to check
+    :return: True if next line exists, not commented, and contains a label; False otherwise
+    """
+
+    if next_line_index < len(lines):  # If there is a next line to check
+        next_line = lines[next_line_index]  # Get the next line content
+        
+        if not re.match(r"^\s*%", next_line) and re.search(r"\\label\s*\{[^}]+\}", next_line):  # If the next line is not fully commented and contains a label, skip it safely
+            return True  # Return True when next line has a non-comment label
+        
+    return False  # Return False when condition not met
+
+
 def generate_label_name_from_title(section_title):
     """
     Generate a sanitized label name from a section title string.
