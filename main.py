@@ -213,6 +213,35 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def fix_glossary_plural(filepath, line, line_number, report):
+    """
+    Fix invalid plural usage of \\gls{} commands.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    if r"\gls{" in line and re.search(r"\\gls\{[^}]+\}s", line):  # If there is a glossary plural misuse in the line
+        new_line = re.sub(r"\\gls\{([^}]+)\}s", r"\\glspl{\1}", line)  # Fix the glossary plural misuse
+        if new_line != line:  # If the line was modified
+            report["glossary_plural"].append(  # Append glossary plural fix to report
+                {
+                    "file": str(filepath),
+                    "line": line_number,
+                    "before": line.rstrip("\n"),
+                    "after": new_line.rstrip("\n"),
+                    "auto_fixable": True,
+                    "applied_fix": True,
+                }
+            )  # End append
+            return new_line, True  # Return the modified line and True
+
+    return line, False  # Return the original line and False
+
+
 def fix_underscore_misuse(filepath, line, line_number, report):
     """
     Fix unescaped underscores outside math mode.
