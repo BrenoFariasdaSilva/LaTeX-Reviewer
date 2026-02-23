@@ -213,6 +213,19 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def extract_decimals_from_line(line):
+    """
+    Extract decimal numbers from a line using configured regex.
+
+    :param line: Line content
+    :return: List of decimal strings found
+    """
+
+    decimal_pattern = re.compile(r"\b\d+[.,]\d+\b")  # Match decimal numbers using dot or comma: 1.23 | 10,5 | 0.75
+    decimals = decimal_pattern.findall(line)  # Find all decimal numbers in the line
+    return decimals  # Return list of decimals found
+
+
 def append_decimal_reports(filepath, line_number, report, number):
     """
     Append decimal formatting and precision entries for a single numeric token.
