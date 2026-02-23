@@ -213,6 +213,27 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_and_fix_spelling(filepath, line, line_number, report, spell=None):
+    """
+    Apply safe deterministic fixes from SAFE_SPELL_FIXES and, if `spell`
+    (a SpellChecker) is provided, add suggestions (no automatic changes).
+
+    Returns: (possibly_modified_line, modified_flag)
+    """
+    
+    code_part, comment = split_code_and_comment(line)  # Split code and comment parts
+
+    modified = False  # Track whether automatic safe fixes were applied
+
+    code_part, was_modified = apply_safe_replacements(filepath, line_number, report, code_part, line)  # Apply safe replacements and record
+    modified = modified or was_modified  # Update modified flag if safe replacements applied
+
+    if spell is not None:  # If a spellchecker is available, add suggestions (do not auto-fix)
+        add_spell_suggestions(filepath, line_number, report, code_part, spell, line)  # Add suggestions to report
+
+    return code_part + comment, modified  # Return possibly modified line and whether we changed it
+
+
 def detect_apostrophes(filepath, line, line_number, report):
     """
     Detect improper apostrophe usage.
