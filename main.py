@@ -213,6 +213,35 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def fix_duplicate_citations(filepath, line, line_number, report):
+    r"""
+    Detect and fix duplicate citation keys inside the same \cite{...} block.
+
+    Example: "\cite{key1,key2,key1}" -> "\cite{key1,key2}"
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    modified = False  # Track whether the line was modified
+
+    for m in re.finditer(r"(\\cite[a-zA-Z]*\s*\{([^}]+)\})", line):  # Find all \cite-like commands on the line
+        full = m.group(1)  # Full matched \cite{...} text
+        inner = m.group(2)  # Inner keys content
+        new_line, new_full, was_modified = build_new_citation_and_line(full, inner, line)  # Build replacement if duplicates present
+        if not was_modified:  # Nothing to fix when 0 or 1 key or no duplicates
+            continue  # Continue with next match
+
+        append_duplicate_citation_report(report, filepath, line_number, full, new_full, str(line).strip())  # Record the duplicate citation fix
+        line = new_line  # Update the line with fixed citation
+        modified = True  # Mark as modified
+
+    return line, modified  # Return the possibly modified line and whether it was modified
+
+
 def uniq_preserve_order(items):
     """
     Return items with duplicates removed preserving order.
