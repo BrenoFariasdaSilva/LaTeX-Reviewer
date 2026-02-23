@@ -179,3 +179,23 @@ Additional side effects performed by the implementation:
 - The script may modify `.tex` files in-place under `ROOT_PATH` when an auto-fix is applied (the code writes back modified files when any fix flag is set).
 - A log file is created by the repository-local `Logger` and the script redirects `sys.stdout` and `sys.stderr` to the `Logger` instance. The logger is instantiated with `"./Logs/{Path(__file__).stem}.log"`, which with the provided filename results in `./Logs/main.log`.
 - The script registers a sound-playing callback via `atexit.register(play_sound)` when `RUN_FUNCTIONS["Play Sound"]` is truthy; the `play_sound` function performs no action on Windows (it returns immediately) and otherwise attempts to run an OS-specific playback command if `SOUND_FILE` exists.
+
+## How to Cite?
+
+If you use the LaTeX-Reviewer in your research, please cite it using the following BibTeX entry:
+
+```
+@misc{softwareLaTeX-Reviewer:2026,
+  title = {LaTeX-Reviewer: Automated reviewer for academic LaTeX projects that detects common writing, formatting, and style issues and applies safe, deterministic auto-fixes where unambiguous. Produces a structured JSON report of findings and changes to support CI integration and reproducible proofreading.},
+  author = {Breno Farias da Silva},
+  year = {2026},
+  howpublished = {https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer},
+  note = {Accessed on September 11, 2026}
+}
+```
+
+Additionally, a `main.bib` file is available in the root directory of this repository, in which contains the BibTeX entry for this project.
+
+If you find this repository valuable, please don't forget to give it a ⭐ to show your support! Contributions are highly encouraged, whether by creating issues for feedback or submitting pull requests (PRs) to improve the project. For details on how to contribute, please refer to the [Contributing](#contributing) section below.
+
+Thank you for your support and for recognizing the contribution of this tool to your work!
