@@ -213,6 +213,19 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def is_table_like_environment_line(line):
+    """
+    Return True if the provided line is a table-like begin/end environment.
+
+    :param line: Line content to check
+    :return: True if line contains a begin/end of tabular/table/longtable
+    """
+
+    if re.search(r"\\begin\{(tabular|table|longtable)\}", line) or re.search(r"\\end\{(tabular|table|longtable)\}", line):  # Detect table-like begin/end
+        return True  # Return True when table-like environment detected
+    return False  # Return False when not detected
+
+
 def get_leading_whitespace_match(line):
     """
     Return a regex match for leading whitespace and the remainder of the line.
