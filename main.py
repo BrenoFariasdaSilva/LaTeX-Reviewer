@@ -213,6 +213,58 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def fix_missing_section_labels(filepath, lines, line_index, report):
+    """
+    Fix sectioning commands that do not have a following \\label{} by automatically
+    generating and inserting appropriate labels.
+
+    Verifies for: \\chapter{}, \\section{}, \\subsection{}, \\subsubsection{},
+    and the starred variants (e.g. \\subsubsection*{}).
+
+    Label format: \\label{sec:section-name-in-lowercase}
+
+    :param filepath: Path to the .tex file
+    :param lines: List of all file lines
+    :param line_index: Current line index (0-based)
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (modified flag, label inserted flag)
+    """
+    
+    line = lines[line_index]  # Get the current line content
+
+    line_number = line_index + 1  # Calculate the line number (1-based)
+
+    if line_is_fully_commented(line):  # If the line is fully commented, skip it safely
+        return False, False  # Return False for both modified and label inserted flags since we are skipping a commented line
+
+    heading_match = get_section_heading_match(line)  # Match sectioning commands with their titles
+
+    if not heading_match:  # If there is no sectioning command in the line, return False for both flags
+        return False, False  # Return False for both modified and label inserted flags since there is no sectioning command to process
+
+    if line_contains_label(line):  # If the line already contains a label, skip it safely
+        return False, False  # Return False for both modified and label inserted flags since there is already a label in the line
+
+    next_line_index = line_index + 1  # Calculate the index of the next line
+
+    if next_line_has_noncomment_label(lines, next_line_index):  # If the next line is present, not commented and contains a label
+        return False, False  # Return False for both modified and label inserted flags since there is already a label in the next line
+
+    section_title = heading_match.group(3)  # Generate label from section title
+
+    label_name = generate_label_name_from_title(section_title)  # Create sanitized label name from title
+
+    label_line = construct_label_line_from_line_and_label(line, label_name)  # Construct the label line with indentation
+
+    lines.insert(line_index + 1, label_line)  # Insert label on the next line
+
+    command = heading_match.group(1) + ("*" if heading_match.group(2) else "")  # Build the sectioning command string
+
+    append_missing_section_label_report(report, filepath, line_number, command, heading_match, label_name, line)  # Append missing section label report entry
+
+    return True, True  # Indicate modification applied and label inserted
+
+
 def load_bibtex_keys(bibfile):
     """
     Load BibTeX entry keys from a .bib file.
