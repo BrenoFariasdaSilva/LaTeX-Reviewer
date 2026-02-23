@@ -51,6 +51,7 @@ Assumptions & Notes:
 """
 
 
+import argparse  # argparse used for runtime configuration overrides
 import atexit  # For playing a sound when the program finishes
 import datetime  # For getting the current date and time
 import json  # For generating the JSON report
@@ -1677,11 +1678,30 @@ def main():
     )  # Register the play_sound function to be called when the program finishes
 
 
+def create_arg_parser():
+    """
+    Create and return the ArgumentParser used for runtime overrides.
+
+    :return: Configured ArgumentParser instance
+    """
+
+    parser = argparse.ArgumentParser(description="LaTeX-Reviewer configuration overrides")  # Initialize argument parser for CLI overrides
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")  # Add verbose flag argument
+    parser.add_argument("--root-path", type=str, dest="root_path", help="Override ROOT_PATH")  # Add root path override argument
+    parser.add_argument("--pdf-file", type=str, dest="pdf_file", help="Override PDF_FILE")  # Add PDF file override argument
+    parser.add_argument("--bibtex-file", type=str, dest="bibtex_file", help="Override BIBTEX_FILE")  # Add BibTeX file override argument
+    parser.add_argument("--glossary-file", type=str, dest="glossary_file", help="Override GLOSSARY_FILE")  # Add glossary file override argument
+    return parser  # Return configured ArgumentParser instance
+
+
 if __name__ == "__main__":
     """
     This is the standard boilerplate that calls the main() function.
 
     :return: None
     """
+
+    parser = create_arg_parser()  # Create the argument parser for CLI overrides
+    args = parser.parse_args()  # Parse the command-line arguments
 
     main()  # Call the main function
