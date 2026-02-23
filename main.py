@@ -182,6 +182,39 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def analyze_file(filepath, report, bib_keys=None, spell=None):
+    """
+    Analyze a single LaTeX file and apply safe auto-fixes.
+
+    :param filepath: Path to the .tex file
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    with open(filepath, "r", encoding="utf-8") as file:  # Open the file for reading
+        lines = file.readlines()  # Read all lines from the file into a list
+
+    modified = False  # Flag to track if the file was modified
+
+    line_index = 0  # Start index for first-pass modifications
+    while line_index < len(lines):  # Iterate through lines allowing insertions
+        was_modified, label_inserted = fix_missing_section_labels(filepath, lines, line_index, report)  # Attempt to insert missing label
+        modified = modified or was_modified  # Update file-level modified flag
+        if label_inserted:  # If a label was inserted just after current line
+            line_index += 2  # Skip over the newly inserted label line
+        else:
+            line_index += 1  # Move to next original line
+
+    for line_number, line in enumerate(lines, start=1):  # Iterate through each line with line numbers
+        line, was_modified = analyze_line(filepath, line, line_number, report, bib_keys, spell)  # Analyze a single line for issues and fixes
+        modified = modified or was_modified  # Update modification flag if any fixes applied
+        lines[line_number - 1] = line  # Replace list entry with possibly modified line
+
+    if modified:  # If the file was modified
+        with open(filepath, "w", encoding="utf-8") as file:  # Open the file for writing
+            file.writelines(lines)  # Write the modified lines back to the file
+
+
 def to_seconds(obj):
     """
     Converts various time-like objects to seconds.
