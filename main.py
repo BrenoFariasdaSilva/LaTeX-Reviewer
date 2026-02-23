@@ -213,6 +213,32 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def add_spell_suggestions(filepath, line_number, report, code_part, spell, original_line):
+    """
+    Use a SpellChecker to add suggestions to the report for unknown words.
+
+    :param filepath: Path to the .tex file
+    :param line_number: Line number where suggestions are generated
+    :param report: Report dictionary to append suggestions to
+    :param code_part: The code portion of the line (no comment)
+    :param spell: SpellChecker instance
+    :param original_line: The original full line for context
+    :return: None
+    """
+
+    for m in re.finditer(r"(?<!\\)\b([A-Za-z][A-Za-z']+)\b", code_part):  # Iterate candidate words (skip LaTeX commands and math)
+        word = m.group(1)  # Extract matched word
+        lw = word.lower()  # Lowercased word for verifications
+        
+        if is_ignored_by_safe_spell_fixes(lw):  # Skip words we already fix safely
+            continue  # Continue to next word
+        
+        suggestion = get_spell_suggestion_safe(spell, lw)  # Query spellchecker safely
+        
+        if suggestion and suggestion.lower() != lw:  # If suggestion differs
+            append_spell_suggestion(report, filepath, line_number, word, suggestion, original_line)  # Add suggestion entry to report
+
+
 def detect_and_fix_spelling(filepath, line, line_number, report, spell=None):
     """
     Apply safe deterministic fixes from SAFE_SPELL_FIXES and, if `spell`
