@@ -213,6 +213,26 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def append_mixed_numeric_representation(report, filepath, line_number):
+    """
+    Append a mixed numeric representation issue entry into the report.
+
+    :param report: Report dictionary
+    :param filepath: Path to the .tex file
+    :param line_number: Line number where issue was detected
+    :return: None
+    """
+
+    report["numeric_representation"].append(  # Record mixed numeric representation issue
+        {
+            "file": str(filepath),  # File path where issue occurred
+            "line": line_number,  # Line number where issue occurred
+            "issue": "mixed_decimal_and_percentage",  # Issue identifier
+            "auto_fixable": False,  # Not auto-fixable
+        }
+    )  # End append
+
+
 def detect_numeric_consistency(filepath, line, line_number, report):
     """
     Detect numeric usage consistency.
