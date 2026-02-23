@@ -8,7 +8,7 @@
   
 ---
 
-Project-Description.
+Automated reviewer for academic LaTeX projects that detects common writing, formatting, and style issues and applies safe, deterministic auto-fixes where unambiguous. Produces a structured JSON report of findings and changes to support CI integration and reproducible proofreading..
   
 ---
 
@@ -136,7 +136,7 @@ If you use the LaTeX-Reviewer in your research, please cite it using the followi
 
 ```
 @misc{softwareLaTeX-Reviewer:2026,
-  title = {LaTeX-Reviewer: Project-Description},
+  title = {LaTeX-Reviewer: Automated reviewer for academic LaTeX projects that detects common writing, formatting, and style issues and applies safe, deterministic auto-fixes where unambiguous. Produces a structured JSON report of findings and changes to support CI integration and reproducible proofreading.},
   author = {Breno Farias da Silva},
   year = {2026},
   howpublished = {https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer},
