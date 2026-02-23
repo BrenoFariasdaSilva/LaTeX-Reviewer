@@ -213,6 +213,17 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def get_leading_whitespace_match(line):
+    """
+    Return a regex match for leading whitespace and the remainder of the line.
+
+    :param line: Line content to check
+    :return: Regex Match object or None
+    """
+
+    return re.match(r"^([ \t]*)(.*)$", line)  # Match leading whitespace and content
+
+
 def process_double_whitespace_and_report(filepath, line_number, report, indent, content, original_line):
     """
     Process content for multiple consecutive spaces, update report and return new line.
