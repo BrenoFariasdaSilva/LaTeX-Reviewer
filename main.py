@@ -213,6 +213,17 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def collect_tex_files(root_path):
+    """
+    Collect all .tex files under the given root path.
+
+    :param root_path: Root directory of the LaTeX project
+    :return: List of Path objects
+    """
+
+    return list(Path(root_path).rglob("*.tex"))  # Return a list of all .tex files under the root path
+
+
 def detect_unresolved_references(filepath, line, line_number, report):
     """
     Detect unresolved LaTeX references.
