@@ -213,6 +213,22 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def find_percentages_and_proportions(line):
+    """
+    Find percentage and proportion patterns in a line.
+
+    :param line: Line content
+    :return: Tuple (percentages, proportions)
+    """
+
+    percentage_pattern = re.compile(r"\b\d+\s*\\%")  # Match percentages written correctly as: 25 \%
+    percentages = percentage_pattern.findall(line)  # Find percentage values
+
+    proportion_pattern = re.compile(r"\b0[.,]\d+\b")  # Match proportions written as decimals: 0.25 | 0,75
+    proportions = proportion_pattern.findall(line)  # Find decimal proportions
+    return percentages, proportions  # Return both lists
+
+
 def append_mixed_numeric_representation(report, filepath, line_number):
     """
     Append a mixed numeric representation issue entry into the report.
