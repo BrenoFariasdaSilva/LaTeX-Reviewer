@@ -213,6 +213,36 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def fix_double_whitespace(filepath, line, line_number, report):
+    """
+    Fix multiple consecutive spaces in running text.
+
+    - Preserves leading indentation
+    - Skips table-like environments
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    if is_table_like_environment_line(line):  # Skip table-like environments
+        return line, False  # Return the original line and False
+
+    match = get_leading_whitespace_match(line)  # Match leading whitespace and content
+    if not match:  # Safety guard (required for static analysis and robustness)
+        return line, False  # Return the original line and False
+
+    indent, content = match.groups()  # Extract indentation and content
+
+    new_line, was_modified = process_double_whitespace_and_report(filepath, line_number, report, indent, content, line)  # Process and possibly update
+    if was_modified:  # If processing modified the line
+        return new_line, True  # Return the modified line and True
+
+    return line, False  # Return the original line and False
+
+
 def fix_glossary_plural(filepath, line, line_number, report):
     """
     Fix invalid plural usage of \\gls{} commands.
