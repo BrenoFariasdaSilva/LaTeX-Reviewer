@@ -8,8 +8,10 @@
   
 ---
 
-Automated reviewer for academic LaTeX projects that detects common writing, formatting, and style issues and applies safe, deterministic auto-fixes where unambiguous. Produces a structured JSON report of findings and changes to support CI integration and reproducible proofreading..
-  
+Analyzes LaTeX projects by scanning `.tex` files under the configured `ROOT_PATH`. Detects a defined set of issues implemented in the code: unresolved references, repeated parentheses, first-person pronouns, improper apostrophes, decimal formatting and precision, double whitespace, glossary plural misuse, unescaped underscores, percentage formatting, missing section labels, missing BibTeX entries, mixed numeric representations, itemize punctuation inconsistencies, duplicate citations, and spelling issues.
+
+Where the implementation defines deterministic, unambiguous fixes the script updates files in-place and preserves indentation and commented content. It also performs heuristic checks against a compiled PDF for rendered issues (unresolved references, repeated parentheses, glossary indications). All findings and applied fixes are written to the JSON report at the `OUTPUT_REPORT` path; spelling suggestions are produced via `SpellChecker` but are not auto-applied. The script redirects `stdout`/`stderr` to the repository `Logger` and may register a platform-dependent sound callback on exit when enabled.
+
 ---
 
 </div>
