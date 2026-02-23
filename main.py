@@ -213,6 +213,32 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def append_duplicate_citation_report(report, filepath, line_number, before, after, context):
+    """
+    Append the duplicate citation fix entry into the report dictionary.
+
+    :param report: The report dictionary to append into
+    :param filepath: Path to the file where the fix was applied
+    :param line_number: The 1-based line number where the citation was found
+    :param before: The original citation text before modification
+    :param after: The modified citation text after deduplication
+    :param context: The line context for reporting
+    :return: None
+    """
+
+    report["duplicate_citations"].append(  # Record the duplicate citation fix
+        {
+            "file": str(filepath),  # File path where fix was applied
+            "line": line_number,  # Line number where fix was applied
+            "before": before,  # Original citation text
+            "after": after,  # New citation text
+            "context": context,  # Line context
+            "auto_fixable": True,  # Mark as auto fixable
+            "applied_fix": True,  # Mark as applied
+        }
+    )  # End append
+
+
 def fix_duplicate_citations(filepath, line, line_number, report):
     r"""
     Detect and fix duplicate citation keys inside the same \cite{...} block.
