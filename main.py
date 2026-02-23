@@ -213,6 +213,49 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def analyze_line(filepath, line, line_number, report, bib_keys=None, spell=None):
+    """
+    Analyze a single line of a LaTeX file.
+
+    :param filepath: Path to the .tex file
+    :param line: Current line content
+    :param line_number: Line number in the file
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    modified = False  # Flag to track if the line was modified
+
+    detect_unresolved_references(filepath, line, line_number, report)  # Detect unresolved references
+    detect_repeated_parentheses(filepath, line, line_number, report)  # Detect repeated parentheses
+    detect_pronouns(filepath, line, line_number, report)  # Detect first-person pronouns
+    detect_apostrophes(filepath, line, line_number, report)  # Detect improper apostrophe usage
+    detect_numeric_consistency(filepath, line, line_number, report)  # Detect numeric consistency issues
+
+    if bib_keys is not None:  # If BibTeX keys are provided
+        detect_missing_bib_entries(filepath, line, line_number, bib_keys, report)  # Detect missing BibTeX entries
+
+    line, dup_cite_modified = fix_duplicate_citations(filepath, line, line_number, report)  # Fix duplicate keys in \cite
+    modified = modified or dup_cite_modified  # Update modified flag if duplicates fixed
+
+    line, spelling_modified = detect_and_fix_spelling(filepath, line, line_number, report, spell)  # Detect and fix spelling
+    modified = modified or spelling_modified  # Update modified flag if spelling changed
+
+    line, double_whitespace_modified = fix_double_whitespace(filepath, line, line_number, report)  # Fix multiple consecutive spaces
+    modified = modified or double_whitespace_modified  # Update modification flag
+
+    line, glossary_modified = fix_glossary_plural(filepath, line, line_number, report)  # Fix glossary plural misuse
+    modified = modified or glossary_modified  # Update modification flag
+
+    line, underscore_modified = fix_underscore_misuse(filepath, line, line_number, report)  # Fix underscore misuse
+    modified = modified or underscore_modified  # Update modification flag
+
+    line, percentage_modified = fix_percentage_misuse(filepath, line, line_number, report)  # Fix percentage misuse
+    modified = modified or percentage_modified  # Update modification flag
+
+    return line, modified  # Return the (possibly modified) line and modification flag
+
+
 def analyze_file(filepath, report, bib_keys=None, spell=None) -> tuple[str, bool]:
     """
     Analyze a single LaTeX file and apply safe auto-fixes.
