@@ -182,6 +182,29 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_unresolved_references(filepath, line, line_number, report):
+    """
+    Detect unresolved LaTeX references.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if "??" in line:  # If there are unresolved references in the line
+        report["unresolved_references"].append(
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "column": line.find("??") + 1,
+                "matched_text": line.strip(),
+                "auto_fixable": False,
+            }
+        )  # Add the unresolved reference occurrence to the report with relevant details
+
+
 def detect_repeated_parentheses(filepath, line, line_number, report):
     """
     Detect repeated opening or closing parentheses.
