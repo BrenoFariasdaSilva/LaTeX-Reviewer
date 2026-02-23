@@ -182,6 +182,65 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_and_fix_spelling(filepath, line, line_number, report, spell=None):
+    """
+    Apply safe deterministic fixes from SAFE_SPELL_FIXES and, if `spell`
+    (a SpellChecker) is provided, add suggestions (no automatic changes).
+
+    Returns: (possibly_modified_line, modified_flag)
+    """
+    
+    if "%" in line:  # Split off LaTeX comments — do not touch commented text
+        code_part, comment_part = line.split("%", 1)  # Separate code and comment sections
+        comment = "%" + comment_part  # Preserve comment with leading '%'
+    else:
+        code_part = line  # No inline comment present
+        comment = ""  # Empty comment string
+
+    modified = False  # Track whether automatic safe fixes were applied
+
+    new_code = replace_safe(code_part)  # Apply safe replacements to code part
+    if new_code != code_part:  # If replacements changed the code part
+        report["spelling"].append(
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "before": code_part.rstrip("\n"),
+                "after": new_code.rstrip("\n"),
+                "context": line.strip(),
+                "auto_fixable": True,
+                "applied_fix": True,
+            }
+        )  # Recorded safe spelling replacement
+        code_part = new_code  # Update code part with applied safe fixes
+        modified = True  # Mark as modified
+
+    if spell is not None:  # If a spellchecker is available, add suggestions (do not auto-fix)
+        for m in re.finditer(r"(?<!\\)\b([A-Za-z][A-Za-z']+)\b", code_part):  # Iterate candidate words (skip LaTeX commands and math)
+            word = m.group(1)  # Extract matched word
+            lw = word.lower()  # Lowercased word for verifications
+            if lw in SAFE_SPELL_FIXES:  # Skip words we already fix safely
+                continue  # Continue to next word
+            try:  # Query spellchecker safely
+                if lw not in spell:  # If word is not found in dictionary
+                    suggestion = spell.correction(lw)  # Get suggestion
+                    if suggestion and suggestion.lower() != lw:  # If suggestion differs
+                        report["spelling"].append(  # Add suggestion entry to report
+                            {
+                                "file": str(filepath),
+                                "line": line_number,
+                                "word": word,
+                                "suggestion": suggestion,
+                                "context": line.strip(),
+                                "auto_fixable": False,
+                            }
+                        )  # End append
+            except Exception:  # Catch any spellchecker errors and ignore
+                pass  # Do not let spellchecker errors break processing
+
+    return code_part + comment, modified  # Return possibly modified line and whether we changed it
+
+
 def detect_apostrophes(filepath, line, line_number, report):
     """
     Detect improper apostrophe usage.
