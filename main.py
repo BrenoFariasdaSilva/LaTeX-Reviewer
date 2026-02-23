@@ -213,6 +213,21 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_repeated_parentheses(filepath, line, line_number, report):
+    """
+    Detect repeated opening or closing parentheses.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    detect_repeated_left_parentheses_in_line(filepath, line, line_number, report)  # If there are repeated opening parentheses in the line
+    detect_repeated_right_parentheses_in_line(filepath, line, line_number, report)  # If there are repeated closing parentheses in the line
+
+
 def detect_pronouns(filepath, line, line_number, report):
     """
     Detect first-person pronouns.
