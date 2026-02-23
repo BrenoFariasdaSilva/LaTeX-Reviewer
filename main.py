@@ -54,12 +54,16 @@ Assumptions & Notes:
 
 import atexit  # For playing a sound when the program finishes
 import datetime  # For getting the current date and time
-import os  # For running a command in the terminal
+import json  # For generating the JSON report
+import os  # For filesystem operations
 import platform  # For getting the operating system name
+import re  # For pattern matching
 import sys  # For system-specific parameters and functions
 from colorama import Style  # For coloring the terminal
 from Logger import Logger  # For logging output to both terminal and file
 from pathlib import Path  # For handling file paths
+from functools import partial  # For binding replacement functions in regex
+from spellchecker import SpellChecker  # type: ignore
 
 
 # Macros:
