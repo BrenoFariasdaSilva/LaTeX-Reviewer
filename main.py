@@ -182,6 +182,47 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def fix_percentage_misuse(filepath, line, line_number, report):
+    """
+    Fix percentage usage consistency.
+
+    Rules:
+    - Percentages must be written as ' <number> \\%'
+    - A space is required before '\\%'
+    - Ignore fully commented lines
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    if re.match(r"\s*%", line):  # Ignore fully commented lines
+        return line, False  # Return the
+
+    original_line = line  # Store the original line
+
+    line = re.sub(r"(\d)%", r"\1 \\%", line)  # Fix missing backslash before percent: 10% -> 10 \%
+
+    line = re.sub(r"(\d)\\%", r"\1 \\%", line)  # Ensure space before \%: 10\% -> 10 \%
+
+    if line != original_line:  # If the line was modified
+        report["percentage_misuse"].append(  # Append percentage fix to report
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "before": original_line.rstrip("\n"),
+                "after": line.rstrip("\n"),
+                "auto_fixable": True,
+                "applied_fix": True,
+            }
+        )  # End append
+        return line, True  # Return the modified line and True
+
+    return line, False  # Return the original line and False
+
+
 def analyze_line(filepath, line, line_number, report, bib_keys=None, spell=None):
     """
     Analyze a single line of a LaTeX file.
