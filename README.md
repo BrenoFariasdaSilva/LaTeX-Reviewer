@@ -60,3 +60,10 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 Automatically detects and fixes common LaTeX writing and formatting issues in academic papers. The code operates directly on LaTeX source files (.tex) under a configured root path, preserves formatting and comments when making safe deterministic auto-fixes, and produces a machine-readable JSON report of findings and applied fixes.
 
 The implementation includes functions for file-system discovery of .tex sources, rendered-output heuristics against a compiled PDF, BibTeX key extraction, per-line analysis for a set of explicit checks, and in-place application of unambiguous fixes.
+
+## Requirements
+
+- Python >= 3.9 (documented in the script docstring)
+- Standard-library modules imported by the script: `atexit`, `datetime`, `json`, `os`, `platform`, `re`, `sys`, `functools`, `pathlib`
+- Third-party modules imported by the script: `colorama`, `spellchecker` (the script imports `from spellchecker import SpellChecker`)
+- A local module present in the repository: `Logger.py` (imported as `from Logger import Logger`)
