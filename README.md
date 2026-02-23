@@ -45,7 +45,6 @@ Automated reviewer for academic LaTeX projects that detects common writing, form
   - [Installation:](#installation)
   - [Run Programing Language Code:](#run-programing-language-code)
     - [Dependencies](#dependencies)
-    - [Dataset - Optional](#dataset---optional)
   - [Usage](#usage)
   - [Results](#results)
   - [How to Cite?](#how-to-cite)
@@ -108,14 +107,6 @@ Bullet points of the requirements.
 
    ```bash
    make dependencies
-   ```
-
-### Dataset - Optional
-
-1. Download the dataset from [WEBSITE-HERE]() and place it in this project directory `(/LaTeX-Reviewer)` and run the following command:
-
-   ```bash
-   make dataset
    ```
 
 ## Usage
