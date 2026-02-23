@@ -124,4 +124,21 @@ The implementation includes functions for file-system discovery of .tex sources,
       ```bash
       chmod +x install_dependencies.sh
       ./install_dependencies.sh
-      ```
+      ```  
+
+## Run Programing Language Code:
+
+```bash
+python3 main.py
+```
+
+### Dependencies
+
+The script imports the following modules; install the third-party modules before running:
+
+- `colorama` (imported as `from colorama import Style`)
+- `spellchecker` (imported as `from spellchecker import SpellChecker`)
+
+The script also requires the repository-local `Logger.py` module which is imported at runtime.
+
+Standard-library modules used (no installation required): `atexit`, `datetime`, `json`, `os`, `platform`, `re`, `sys`, `functools`, `pathlib`.
