@@ -182,6 +182,28 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_apostrophes(filepath, line, line_number, report):
+    """
+    Detect improper apostrophe usage.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if "'" in line and not ("``" in line or "''" in line):  # If there are apostrophes in the line not part of quotes
+        report["apostrophes"].append(  # Record apostrophe occurrence
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "matched_text": line.strip(),
+                "auto_fixable": False,
+            }
+        )  # End append
+
+
 def detect_numeric_consistency(filepath, line, line_number, report):
     """
     Detect numeric usage consistency.
