@@ -208,3 +208,7 @@ Icon? # match Icon<CR>
 **/ENV/
 **/env.bak/
 **/venv.bak/
+
+# Ignore auto-committer files
+functions_committer.py
+readme_sections_committer.py
