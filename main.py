@@ -182,6 +182,26 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def replacement_preserve_case(m, right):
+    """
+    Replacement function for regex that preserves the case of the original word.
+
+    :param m: regex match object
+    :param right: replacement string to use
+    :return: replacement string with preserved case
+    """
+
+    orig = m.group(0)  # Original matched token
+
+    if orig.isupper():  # If the original is all uppercase, return the replacement in uppercase
+        return right.upper()  # Preserve all-uppercase
+
+    if orig[0].isupper():  # If the original is capitalized, return the replacement capitalized
+        return right.capitalize()  # Preserve initial capitalization
+
+    return right  # Default lowercase replacement
+
+
 def replace_safe(s: str):
     """
     Apply safe, case-preserving replacements from SAFE_SPELL_FIXES to a string.
