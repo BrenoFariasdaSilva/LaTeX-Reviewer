@@ -213,6 +213,36 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def apply_safe_replacements(filepath, line_number, report, code_part, original_line):
+    """
+    Apply safe replacements from SAFE_SPELL_FIXES and record the change in report.
+
+    :param filepath: Path to the .tex file
+    :param line_number: Line number where replacement occurred
+    :param report: Report dictionary to append to
+    :param code_part: The code portion of the line (no comment)
+    :param original_line: The original full line for context
+    :return: Tuple (possibly modified code_part, modified_flag)
+    """
+
+    new_code = replace_safe(code_part)  # Apply safe replacements to code part
+    if new_code != code_part:  # If replacements changed the code part
+        report["spelling"].append(  # Recorded safe spelling replacement
+            {
+                "file": str(filepath),  # File where replacement occurred
+                "line": line_number,  # Line number where replacement occurred
+                "before": code_part.rstrip("\n"),  # Original code part before change
+                "after": new_code.rstrip("\n"),  # New code part after change
+                "context": original_line.strip(),  # Full line context
+                "auto_fixable": True,  # Mark as auto-fixable
+                "applied_fix": True,  # Mark as applied
+            }
+        )  # End append
+        code_part = new_code  # Update code part with applied safe fixes
+        return code_part, True  # Return modified code and flag
+    return code_part, False  # Return original code and False when unchanged
+
+
 def is_ignored_by_safe_spell_fixes(lw):
     """
     Return True when the lowercased word is present in SAFE_SPELL_FIXES.
