@@ -80,6 +80,54 @@ class BackgroundColors:  # Colors for the terminal
 # Execution Constants:
 VERBOSE = False  # Set to True to output verbose messages
 
+# File Paths:
+ROOT_PATH = f"./Input/SBC Paper/"  # Root directory of the LaTeX project
+PDF_FILE = f"{ROOT_PATH}main.pdf"  # Compiled PDF used for rendered-output verifications
+BIBTEX_FILE = f"{ROOT_PATH}main.bib"  # Compiled PDF used for rendered-output verifications
+OUTPUT_REPORT = f"{ROOT_PATH}latex_review_report.json"  # JSON report output path
+
+# Regex Patterns:
+PRONOUNS = {
+    "en": [
+        r"\bI(?=\b|')",
+        r"\bme(?=\b|')",
+        r"\bmy(?=\b|')",
+        r"\bmine(?=\b|')",
+        r"\bmyself\b",
+        r"\bwe(?=\b|')",
+        r"\bus(?=\b|')",
+        r"\bour(?=\b|')",
+        r"\bours(?=\b|')",
+        r"\bourselves\b",
+    ],
+    "pt-br": [
+        r"\beu\b",
+        r"\bmim\b",
+        r"\bme\b",
+        r"\bmeu\b",
+        r"\bminha\b",
+        r"\bmeus\b",
+        r"\bminhas\b",
+        r"\bnós\b",
+        r"\bnos\b",
+        r"\bnossa\b",
+        r"\bnosso\b",
+        r"\bnossas\b",
+        r"\bnossos\b",
+    ],
+}
+
+
+# Safe Spell Fixes:
+SAFE_SPELL_FIXES = {
+    "futhermore": "furthermore",
+    "seperate": "separate",
+    "occured": "occurred",
+    "teh": "the",
+    "recieve": "receive",
+}
+
+
 # Logger Setup:
 logger = Logger(f"./Logs/{Path(__file__).stem}.log", clean=True)  # Create a Logger instance
 sys.stdout = logger  # Redirect stdout to the logger
