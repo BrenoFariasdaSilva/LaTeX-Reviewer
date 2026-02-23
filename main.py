@@ -182,6 +182,26 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def replace_safe(s: str):
+    """
+    Apply safe, case-preserving replacements from SAFE_SPELL_FIXES to a string.
+
+    :param s: Input string to process
+    :return: Transformed string with safe replacements applied
+    """
+
+    out = s  # Working copy of the input string
+
+    for wrong, right in SAFE_SPELL_FIXES.items():  # Iterate configured safe fixes
+        out = re.sub(
+            rf"\b{re.escape(wrong)}\b",
+            partial(replacement_preserve_case, right=right),
+            out,
+            flags=re.IGNORECASE,
+        )  # Apply replacement with case-preserving helper bound to `right`
+    return out  # Return transformed string
+
+
 def detect_and_fix_spelling(filepath, line, line_number, report, spell=None):
     """
     Apply safe deterministic fixes from SAFE_SPELL_FIXES and, if `spell`
