@@ -36,12 +36,15 @@ Assumptions:
     - The logger is safe for short-lived scripts and long-running processes.
 """
 
+
 import os  # For interacting with the filesystem
 import re  # For stripping ANSI escape sequences
 import sys  # For replacing stdout/stderr
 
+
 # Regex Constants:
 ANSI_ESCAPE_REGEX = re.compile(r"\x1B\[[0-9;]*[a-zA-Z]")  # Pattern to remove ANSI colors
+
 
 # Classes Definitions:
 
