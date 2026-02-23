@@ -213,6 +213,54 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def process_item_lines_and_update(lines, item_lines, filepath, report):
+    r"""
+    Process collected \item lines: normalize punctuation, update lines in-place, and append report.
+
+    :param lines: List of file lines to modify
+    :param item_lines: List of indices of \item lines collected within the environment
+    :param filepath: Path to the .tex file being processed
+    :param report: Report dictionary to append entries to
+    :return: True if any line was modified, False otherwise
+    """
+
+    ITEM_PATTERN = re.compile(r"^(\s*)(%?\s*\\item\s+)(.*?)(\s*)$")  # Pattern to parse \item lines
+    modified = False  # Track whether any modifications occurred
+    
+    for idx, line_no in enumerate(item_lines):  # Iterate collected \item line indices
+        original = lines[line_no].rstrip("\n")  # Get the original line content
+        match = ITEM_PATTERN.match(original)  # Match the \item line
+        
+        if not match:  # If the line does not match the \item pattern
+            continue  # Skip to the next line
+
+        indent, prefix, content, trailing = match.groups()  # Extract groups
+
+        content = re.sub(r"[.;]\s*$", "", content)  # Remove existing punctuation
+
+        if idx < len(item_lines) - 1:  # Last item ends with ".", others with ";"
+            content += ";"  # Add semicolon
+        else:  # Last item ends with a period
+            content += "."  # Add period
+
+        new_line = f"{indent}{prefix}{content}{trailing}\n"  # Reconstruct the line
+
+        if new_line != lines[line_no]:  # If the line was modified
+            lines[line_no] = new_line  # Update the line in the list
+            modified = True  # Set the modified flag to True
+
+    if item_lines:  # If any \item lines were collected
+        report["itemize_punctuation"].append(  # Record that itemize punctuation was fixed
+            {
+                "file": str(filepath),  # File where fix was applied
+                "auto_fixable": True,  # Mark as auto-fixable
+                "applied_fix": True,  # Mark as applied
+            }
+        )  # End append
+
+    return modified  # Return whether any modification occurred
+
+
 def is_table_like_environment_line(line):
     """
     Return True if the provided line is a table-like begin/end environment.
