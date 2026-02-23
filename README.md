@@ -142,3 +142,26 @@ The script imports the following modules; install the third-party modules before
 The script also requires the repository-local `Logger.py` module which is imported at runtime.
 
 Standard-library modules used (no installation required): `atexit`, `datetime`, `json`, `os`, `platform`, `re`, `sys`, `functools`, `pathlib`.
+
+## Usage
+
+In order to run the program as implemented in `main.py`:
+
+- Option A — via Makefile (if a `make run` target exists):
+
+```bash
+make run
+```
+
+- Option B — directly with Python (the file defines `if __name__ == "__main__": main()`):
+
+```bash
+python3 main.py
+```
+
+Configuration notes (literal variables in the code):
+
+- `ROOT_PATH` (default set in the file to `./Input/SBC Paper/`) — root directory searched for `.tex` files.
+- `OUTPUT_REPORT` (default set to `f"{ROOT_PATH}latex_review_report.json"`) — path where the JSON report is written.
+
+If these values need changing, they must be edited in `main.py` before execution; the script contains no CLI flags or argument parsing.
