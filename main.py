@@ -182,6 +182,49 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def fix_double_whitespace(filepath, line, line_number, report):
+    """
+    Fix multiple consecutive spaces in running text.
+
+    - Preserves leading indentation
+    - Skips table-like environments
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    if re.search(r"\\begin\{(tabular|table|longtable)\}", line) or \
+       re.search(r"\\end\{(tabular|table|longtable)\}", line):  # Skip table-like environments
+        return line, False  # Return the original line and False
+
+    match = re.match(r"^([ \t]*)(.*)$", line)  # Match leading whitespace and content
+    if not match:  # Safety guard (required for static analysis and robustness)
+        return line, False  # Return the original line and False
+
+    indent, content = match.groups()  # Extract indentation and content
+
+    if re.search(r"[^ \t]  +", content):  # If there are multiple consecutive spaces in the content
+        fixed_content = re.sub(r" {2,}", " ", content)  # Replace multiple spaces with a single space
+        if fixed_content != content:  # If the content was modified
+            new_line = indent + fixed_content  # Reconstruct the line with original indentation
+            report["double_whitespace"].append(
+                {
+                    "file": str(filepath),
+                    "line": line_number,
+                    "before": line.rstrip("\n"),
+                    "after": new_line.rstrip("\n"),
+                    "auto_fixable": True,
+                    "applied_fix": True,
+                }
+            )  # Append double-whitespace fix to report
+            return new_line, True  # Return the modified line and True
+
+    return line, False  # Return the original line and False
+
+
 def fix_glossary_plural(filepath, line, line_number, report):
     """
     Fix invalid plural usage of \\gls{} commands.
