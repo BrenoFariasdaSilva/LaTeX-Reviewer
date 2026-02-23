@@ -213,6 +213,28 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_unresolved_in_pdf(content, report, pdf_file):
+    """
+    Detect unresolved references in PDF content and append to report.
+
+    :param content: Decoded PDF content as string
+    :param report: Dictionary accumulating the report data
+    :param pdf_file: Path to the PDF file
+    :return: None
+    """
+    
+    if "??" in content:  # Detect unresolved references in rendered output
+        report["unresolved_references"].append(  # Append occurrence to the report
+            {
+                "file": pdf_file,  # The file path where the issue was found
+                "line": None,  # No line information for PDF-level checks
+                "column": None,  # No column information for PDF-level checks
+                "matched_text": "??",  # The matched problematic text
+                "auto_fixable": False,  # Indicate not auto-fixable
+            }
+        )  # End append
+
+
 def detect_repeated_left_parentheses_in_pdf(content, report, pdf_file):
     """
     Detect repeated left parentheses in PDF content and append to report.
