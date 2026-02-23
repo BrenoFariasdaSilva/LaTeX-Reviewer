@@ -49,6 +49,7 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
   - [Run Programing Language Code:](#run-programing-language-code)
     - [Dependencies](#dependencies)
   - [Usage](#usage)
+    - [Command-line arguments](#command-line-arguments)
   - [Results](#results)
   - [How to Cite?](#how-to-cite)
   - [Contributing](#contributing)
@@ -181,13 +182,39 @@ make run
 ```bash
 python3 main.py
 ```
-
 Configuration notes (literal variables in the code):
 
 - `ROOT_PATH` (default set in the file to `./Input/SBC Paper/`) — root directory searched for `.tex` files.
-- `OUTPUT_REPORT` (default set to `f"{ROOT_PATH}latex_review_report.json"`) — path where the JSON report is written.
+- `OUTPUT_REPORT` (default set to `f"{ROOT_PATH}latex_review_report.json"`) — path where the JSON report is written. When `--root-path` is provided at runtime `OUTPUT_REPORT` is updated to `f"{ROOT_PATH}latex_review_report.json"` using the effective `ROOT_PATH`.
 
-If these values need changing, they must be edited in `main.py` before execution; the script contains no CLI flags or argument parsing.
+### Command-line arguments
+
+Command-line arguments (implemented in `main.py`):
+
+- `--verbose` (optional): enable verbose output. Type: flag (`store_true`). Default: not provided → `VERBOSE` remains `False` (no verbose output).
+
+- `--root-path <path>` (optional): override the module-level `ROOT_PATH`. Type: string. Default: not provided → `ROOT_PATH` keeps its hardcoded value (`./Input/SBC Paper/`). When provided, `ROOT_PATH` is set to the supplied value and becomes the basis for deriving file paths described below.
+
+- `--pdf-file <path>` (optional): explicitly set `PDF_FILE`. Type: string. Default behavior:
+  - If `--pdf-file` is provided, its value becomes `PDF_FILE` (takes precedence).
+  - If `--pdf-file` is not provided and `--root-path` is provided, `PDF_FILE` is derived as `f"{ROOT_PATH}main.pdf"` using the (possibly overridden) `ROOT_PATH`.
+  - If neither `--pdf-file` nor `--root-path` is provided, `PDF_FILE` keeps the hardcoded default from the source (initially `f"{ROOT_PATH}main.pdf"`).
+
+- `--bibtex-file <path>` (optional): explicitly set `BIBTEX_FILE`. Type: string. Default behavior mirrors `--pdf-file` logic:
+  - Explicit `--bibtex-file` value takes precedence.
+  - If not provided and `--root-path` is provided, `BIBTEX_FILE` is derived as `f"{ROOT_PATH}main.bib"`.
+  - If neither provided, `BIBTEX_FILE` keeps its hardcoded default.
+
+- `--glossary-file <path>` (optional): explicitly set `GLOSSARY_FILE`. Type: string. Default behavior mirrors `--pdf-file` logic:
+  - Explicit `--glossary-file` value takes precedence.
+  - If not provided and `--root-path` is provided, `GLOSSARY_FILE` is derived as `f"{ROOT_PATH}entradas-siglas.tex"`.
+  - If neither provided, `GLOSSARY_FILE` keeps its hardcoded default.
+
+Precedence summary (exact behavior implemented):
+
+- Explicit file flags (`--pdf-file`, `--bibtex-file`, `--glossary-file`) override any derived values.
+- When `--root-path` is provided but no explicit file flags are given, the code derives the three files from the effective `ROOT_PATH` as shown above.
+- When no CLI arguments are provided the program uses the hardcoded defaults present in `main.py`.
 
 ## Results
 

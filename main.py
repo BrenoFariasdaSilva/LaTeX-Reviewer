@@ -30,8 +30,6 @@ Outputs:
     - review_report.json
 
 TODOs:
-    - Add CLI argument parsing for configuration overrides.
-    - Update README to include instructions for running the tool and interpreting the report.
     - Extend language support for pronoun detection.
     - Improve math-mode parsing robustness.
 
