@@ -67,3 +67,14 @@ The implementation includes functions for file-system discovery of .tex sources,
 - Standard-library modules imported by the script: `atexit`, `datetime`, `json`, `os`, `platform`, `re`, `sys`, `functools`, `pathlib`
 - Third-party modules imported by the script: `colorama`, `spellchecker` (the script imports `from spellchecker import SpellChecker`)
 - A local module present in the repository: `Logger.py` (imported as `from Logger import Logger`)
+
+## Setup
+
+### Clone the repository
+
+1. Clone the repository with the following command:
+
+   ```bash
+   git clone https://github.com/BrenoFariasDaSilva/LaTeX-Reviewer.git
+   cd LaTeX-Reviewer
+   ```
