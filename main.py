@@ -213,6 +213,21 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def generate_label_name_from_title(section_title):
+    """
+    Generate a sanitized label name from a section title string.
+
+    :param section_title: The raw section title extracted from the heading match
+    :return: Sanitized label name string
+    """
+
+    label_name = section_title.lower().replace(" ", "-")  # Convert to lowercase and replace spaces with hyphens
+    label_name = re.sub(r"[^a-z0-9-]", "", label_name)  # Remove special characters and keep only alphanumeric, hyphens
+    label_name = re.sub(r"-+", "-", label_name)  # Remove multiple consecutive hyphens
+    label_name = label_name.strip("-")  # Remove leading/trailing hyphens
+    return label_name  # Return sanitized label name
+
+
 def construct_label_line_from_line_and_label(line, label_name):
     """
     Construct a label line preserving indentation from the original heading line.
