@@ -213,6 +213,21 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def construct_label_line_from_line_and_label(line, label_name):
+    """
+    Construct a label line preserving indentation from the original heading line.
+
+    :param line: The original heading line
+    :param label_name: The sanitized label name to insert
+    :return: The constructed label line string (with trailing newline)
+    """
+
+    indent_match = re.match(r"^(\s*)", line)  # Create the label line with same indentation as the heading
+    indent = indent_match.group(1) if indent_match else ""  # Extract indentation or use empty string
+    label_line = f"{indent}\\label{{sec:{label_name}}}\n"  # Construct the label line with newline
+    return label_line  # Return the constructed label line
+
+
 def append_missing_section_label_report(report, filepath, line_number, command, heading_match, label_name, line):
     """
     Append a standardized missing section label entry into the report dictionary.
