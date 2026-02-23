@@ -213,6 +213,18 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def is_end_itemize_line(line):
+    """
+    Return True if the provided line marks the end of an itemize environment.
+
+    :param line: Line content to check
+    :return: True if line contains an end{itemize}
+    """
+
+    pattern = re.compile(r"^(\s*)%?\s*\\end\{itemize\}")  # Regex for end{itemize}
+    return bool(pattern.search(line))  # Return whether an end{itemize} was found
+
+
 def process_item_lines_and_update(lines, item_lines, filepath, report):
     r"""
     Process collected \item lines: normalize punctuation, update lines in-place, and append report.
