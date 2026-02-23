@@ -213,6 +213,24 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def get_spell_suggestion_safe(spell, lw):
+    """
+    Safely query the SpellChecker for a suggestion; return suggestion or None.
+
+    :param spell: SpellChecker instance
+    :param lw: Lowercased word to query
+    :return: Suggestion string or None
+    """
+
+    try:  # Protect against spellchecker errors
+        if lw not in spell:  # If word is not found in dictionary
+            suggestion = spell.correction(lw)  # Ask spellchecker for a suggestion
+            return suggestion  # Return suggestion (may be None)
+        return None  # Return None when word exists in dictionary
+    except Exception:  # On any error from spellchecker
+        return None  # Return None to mimic original exception swallowing
+
+
 def append_spell_suggestion(report, filepath, line_number, word, suggestion, original_line):
     """
     Append a suggestion entry into the report['spelling'] list.
