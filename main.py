@@ -182,6 +182,35 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def fix_underscore_misuse(filepath, line, line_number, report):
+    """
+    Fix unescaped underscores outside math mode.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified line, modification flag)
+    """
+
+    if "_" in line and not re.search(r"\\_", line):  # If there are unescaped underscores in the line
+        new_line = line.replace("_", r"\_")  # Escape the underscores
+        if new_line != line:  # If the line was modified
+            report["underscore_misuse"].append(  # Append underscore fix to report
+                {
+                    "file": str(filepath),
+                    "line": line_number,
+                    "before": line.rstrip("\n"),
+                    "after": new_line.rstrip("\n"),
+                    "auto_fixable": True,
+                    "applied_fix": True,
+                }
+            )  # End append
+            return new_line, True  # Return the modified line and True
+
+    return line, False  # Return the original line and False
+
+
 def fix_percentage_misuse(filepath, line, line_number, report):
     """
     Fix percentage usage consistency.
