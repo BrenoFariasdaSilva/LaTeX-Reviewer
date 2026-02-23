@@ -105,12 +105,13 @@ class Logger:
             pass  # Silent fail
 
         try:  # Write to terminal: colored when TTY, cleaned otherwise
-            if self.is_tty:  # Terminal supports colors
-                sys.__stdout__.write(out)  # Write colored message
-                sys.__stdout__.flush()  # Flush immediately
-            else:  # Terminal does not support colors
-                sys.__stdout__.write(clean_out)  # Write cleaned message
-                sys.__stdout__.flush()  # Flush immediately
+            if sys.__stdout__ is not None:
+                if self.is_tty:  # Terminal supports colors
+                    sys.__stdout__.write(out)  # Write colored message
+                    sys.__stdout__.flush()  # Flush immediately
+                else:  # Terminal does not support colors
+                    sys.__stdout__.write(clean_out)  # Write cleaned message
+                    sys.__stdout__.flush()  # Flush immediately
         except Exception:  # Fail silently to avoid breaking user code
             pass  # Silent fail
 
