@@ -182,6 +182,71 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def fix_missing_section_labels(filepath, lines, line_index, report):
+    """
+    Fix sectioning commands that do not have a following \\label{} by automatically
+    generating and inserting appropriate labels.
+
+    Verifies for: \\chapter{}, \\section{}, \\subsection{}, \\subsubsection{},
+    and the starred variants (e.g. \\subsubsection*{}).
+
+    Label format: \\label{sec:section-name-in-lowercase}
+
+    :param filepath: Path to the .tex file
+    :param lines: List of all file lines
+    :param line_index: Current line index (0-based)
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (modified flag, label inserted flag)
+    """
+
+    line = lines[line_index]  # Get the current line content
+    line_number = line_index + 1  # Calculate the line number (1-based)
+
+    if re.match(r"^\s*%", line):  # If the line is fully commented, skip it safely
+        return False, False  # Return False for both modified and label inserted flags since we are skipping a commented line
+
+    heading_match = re.search(r"\\(chapter|section|subsection|subsubsection)(\*?)\s*\{([^}]+)\}", line)  # Match sectioning commands with their titles
+    if not heading_match:  # If there is no sectioning command in the line, return False for both flags
+        return False, False  # Return False for both modified and label inserted flags since there is no sectioning command to process
+
+    if re.search(r"\\label\s*\{[^}]+\}", line):  # If the line already contains a label, skip it safely
+        return False, False  # Return False for both modified and label inserted flags since there is already a label in the line
+
+    next_line_index = line_index + 1  # Calculate the index of the next line
+    if next_line_index < len(lines):  # If there is a next line to check
+        next_line = lines[next_line_index]  # Get the next line content
+        if not re.match(r"^\s*%", next_line) and re.search(r"\\label\s*\{[^}]+\}", next_line):  # If the next line is not fully commented and contains a label, skip it safely
+            return False, False  # Return False for both modified and label inserted flags since there is already a label in the next line
+
+    section_title = heading_match.group(3)  # Generate label from section title
+    label_name = section_title.lower().replace(" ", "-")  # Convert to lowercase and replace spaces with hyphens
+    label_name = re.sub(r"[^a-z0-9-]", "", label_name)  # Remove special characters and keep only alphanumeric, hyphens
+    label_name = re.sub(r"-+", "-", label_name)  # Remove multiple consecutive hyphens
+    label_name = label_name.strip("-")  # Remove leading/trailing hyphens
+
+    indent_match = re.match(r"^(\s*)", line)  # Create the label line with same indentation as the heading
+    indent = indent_match.group(1) if indent_match else ""  # Extract indentation or use empty string
+    label_line = f"{indent}\\label{{sec:{label_name}}}\n"  # Construct the label line with newline
+
+    lines.insert(line_index + 1, label_line)  # Insert label on the next line
+
+    command = heading_match.group(1) + ("*" if heading_match.group(2) else "")
+    report["missing_section_label"].append(
+        {
+            "file": str(filepath),
+            "line": line_number,
+            "command": command,
+            "matched_text": heading_match.group(0),
+            "context": line.strip(),
+            "generated_label": f"\\label{{sec:{label_name}}}",
+            "auto_fixable": True,
+            "applied_fix": True,
+        }
+    )  # Append missing section label report entry
+
+    return True, True  # Indicate modification applied and label inserted
+
+
 def load_bibtex_keys(bibfile):
     """
     Load BibTeX entry keys from a .bib file.
