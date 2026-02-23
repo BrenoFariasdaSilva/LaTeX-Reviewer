@@ -182,6 +182,34 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def initialize_report():
+    """
+    Initialize the review report structure.
+
+    :return: Dictionary representing the empty report
+    """
+
+    return {
+        "unresolved_references": [],
+        "repeated_left_parentheses": [],
+        "repeated_right_parentheses": [],
+        "pronouns": [],
+        "apostrophes": [],
+        "decimal_formatting": [],
+        "decimal_precision": [],
+        "double_whitespace": [],
+        "glossary_plural": [],
+        "underscore_misuse": [],
+        "percentage_misuse": [],
+        "missing_section_label": [],
+        "missing_bib_entries": [],
+        "numeric_representation": [],
+        "itemize_punctuation": [],
+        "duplicate_citations": [],
+        "spelling": [],
+    }  # Return initialized empty report structure
+
+
 def analyze_pdf(report):
     """
     Analyze the compiled PDF for rendered-output issues.
