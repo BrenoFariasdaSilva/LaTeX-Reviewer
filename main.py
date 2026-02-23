@@ -213,6 +213,18 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def is_begin_itemize_line(line):
+    """
+    Return True if the provided line marks the beginning of an itemize environment.
+
+    :param line: Line content to check
+    :return: True if line contains a begin{itemize}
+    """
+
+    pattern = re.compile(r"^(\s*)%?\s*\\begin\{itemize\}")  # Regex for begin{itemize}
+    return bool(pattern.search(line))  # Return whether a begin{itemize} was found
+
+
 def is_end_itemize_line(line):
     """
     Return True if the provided line marks the end of an itemize environment.
