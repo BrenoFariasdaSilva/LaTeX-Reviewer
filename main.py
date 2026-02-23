@@ -634,6 +634,33 @@ def load_bibtex_keys(bibfile):
     return keys
 
 
+def load_glossary_labels():
+    """
+    Load glossary labels from GLOSSARY_FILE.
+
+    :return: set of glossary labels
+    """
+
+    labels = set()  # Initialize empty set for labels
+    
+    if not verify_filepath_exists(GLOSSARY_FILE):  # If glossary file missing, return empty set
+        return labels  # Return empty set when file not present
+    
+    try:
+        with open(GLOSSARY_FILE, "r", encoding="utf-8") as gf:  # Open glossary file for reading
+            content = gf.read()  # Read entire glossary file content
+    except Exception:
+        return labels  # Return empty set on read/parsing error
+    
+    for m in re.finditer(r"\\sigla\s*\{\s*([^}]+)\s*\}\s*\{", content):  # Find \sigla{label}{...}{...}
+        try:
+            labels.add(m.group(1))  # Add the captured label (first argument) to the set
+        except Exception:
+            continue  # Skip malformed matches safely
+    
+    return labels  # Return the set of glossary labels
+
+
 def detect_missing_bib_entries(filepath, line, line_number, bib_keys, report):
     """
     Detect \\cite{...} usages whose keys are not present in the provided bib_keys set.
@@ -1598,6 +1625,10 @@ def main():
 
     bib_keys = load_bibtex_keys(BIBTEX_FILE)  # Load BibTeX keys from the .bib file
     spell = SpellChecker()  # Initialize the spell checker (this may take some time on first run due to loading dictionaries)
+    glossary_labels = load_glossary_labels()  # Load glossary labels once from GLOSSARY_FILE
+
+    for tex_file in tex_files:  # Iterate through each .tex file
+        analyze_file(tex_file, report, bib_keys, spell)  # Analyze the file and update the report
 
     for tex_file in tex_files:  # Iterate through each .tex file
         analyze_file(tex_file, report, bib_keys, spell)  # Analyze the file and update the report
