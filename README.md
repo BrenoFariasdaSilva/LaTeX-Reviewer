@@ -78,3 +78,50 @@ The implementation includes functions for file-system discovery of .tex sources,
    git clone https://github.com/BrenoFariasDaSilva/LaTeX-Reviewer.git
    cd LaTeX-Reviewer
    ```
+
+## Installation:
+
+* Programing Language:
+
+  * Manually:
+
+   Linux (Debian/Ubuntu):
+
+   ```bash
+   sudo apt update
+   sudo apt install python3 python3-pip -y
+   ```
+
+   Linux (Fedora/CentOS):
+
+   ```bash
+   sudo dnf install python3 python3-pip -y
+   ```
+
+   macOS (Homebrew):
+
+   ```bash
+   brew update
+   brew install python
+   ```
+
+   Windows (Chocolatey, run from elevated PowerShell):
+
+   ```powershell
+   choco install python -y
+   ```
+
+   Windows (official installer):
+
+   Visit https://www.python.org/downloads/ and download the Windows installer, then run it manually.
+
+  * Using Makefile:
+      ```bash
+      make install
+      ```
+
+  * Using ShellScript:
+      ```bash
+      chmod +x install_dependencies.sh
+      ./install_dependencies.sh
+      ```
