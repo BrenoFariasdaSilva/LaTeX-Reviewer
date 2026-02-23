@@ -213,6 +213,26 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def replace_safe(s: str):
+    """
+    Apply safe, case-preserving replacements from SAFE_SPELL_FIXES to a string.
+
+    :param s: Input string to process
+    :return: Transformed string with safe replacements applied
+    """
+
+    out = s  # Working copy of the input string
+
+    for wrong, right in SAFE_SPELL_FIXES.items():  # Iterate configured safe fixes
+        out = re.sub(
+            rf"\b{re.escape(wrong)}\b",
+            partial(replacement_preserve_case, right=right),
+            out,
+            flags=re.IGNORECASE,
+        )  # Apply replacement with case-preserving helper bound to `right`
+    return out  # Return transformed string
+
+
 def split_code_and_comment(line):
     """
     Split a LaTeX line into code and comment parts.
