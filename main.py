@@ -31,10 +31,11 @@ Outputs:
 
 TODOs:
     - Verify for used \gls{} entries against defined glossary terms.
+    - Update README to include the verifications performed by the tool.
     - Add CLI argument parsing for configuration overrides.
+    - Update README to include instructions for running the tool and interpreting the report.
     - Extend language support for pronoun detection.
     - Improve math-mode parsing robustness.
-    - Add unit tests for individual verifications.
 
 Dependencies:
     - Python >= 3.9
