@@ -213,6 +213,30 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def build_new_citation_and_line(full, inner, line):
+    r"""
+    Build a deduplicated citation replacement and the new line when duplicates exist.
+
+    :param full: The full matched citation text including command and braces
+    :param inner: The inner keys content from the citation
+    :param line: The original full line containing the citation
+    :return: Tuple (new_line or None, new_full or None, modified_flag)
+    """
+
+    keys = get_citation_keys(inner)  # Extract keys from inner content
+    if len(keys) <= 1:  # Nothing to fix when 0 or 1 key
+        return None, None, False  # Return early when no change required
+
+    uniq = uniq_preserve_order(keys)  # Deduplicate while preserving order
+    if len(uniq) != len(keys):  # If duplicates were found
+        new_inner = ",".join(uniq)  # Join unique keys back into a string
+        new_full = full.replace("{" + inner + "}", "{" + new_inner + "}")  # Build replacement citation
+        new_line = line.replace(full, new_full, 1)  # Replace first occurrence on the line
+        return new_line, new_full, True  # Return constructed replacements and flag
+
+    return None, None, False  # Return no-change when no duplicates
+
+
 def append_duplicate_citation_report(report, filepath, line_number, before, after, context):
     """
     Append the duplicate citation fix entry into the report dictionary.
