@@ -213,6 +213,48 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def fix_itemize_punctuation(filepath, lines, report):
+    """
+    Fix punctuation consistency inside itemize environments.
+
+    Rules:
+    - Every \\item ends with ';'
+    - Last \\item ends with '.'
+    - Works with commented itemize environments
+    - Preserves indentation, spacing, and comment markers
+
+    :param filepath: Path to the .tex file
+    :param lines: List of file lines
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified lines, modification flag)
+    """
+
+    ITEM_PATTERN = re.compile(r"^(\s*)(%?\s*\\item\s+)(.*?)(\s*)$")  # Match any \item, commented or not
+
+    in_itemize = False  # Flag indicating if we are inside an itemize environment
+    item_lines = []  # List of line indices for \item lines
+    modified = False  # Flag to track if any modifications were made
+
+    for i, line in enumerate(lines):  # Iterate through each line
+        if is_begin_itemize_line(line):  # Detect begin{itemize}, commented or not
+            in_itemize = True  # Set the flag to True
+            item_lines = []  # Reset the list of \item line indices
+            continue  # Continue to the next line
+
+        if is_end_itemize_line(line) and in_itemize:  # Detect end{itemize}, commented or not
+            was_modified = process_item_lines_and_update(lines, item_lines, filepath, report)  # Process collected \item lines
+            if was_modified:  # If processing modified any lines
+                modified = True  # Set the modified flag to True
+
+            in_itemize = False  # Reset the flag
+            continue  # Continue to the next line
+
+        if in_itemize and ITEM_PATTERN.match(line):  # If inside itemize and line matches \item
+            item_lines.append(i)  # Collect the line index
+
+    return lines, modified  # Return the (possibly modified) lines and modification flag
+
+
 def fix_double_whitespace(filepath, line, line_number, report):
     """
     Fix multiple consecutive spaces in running text.
