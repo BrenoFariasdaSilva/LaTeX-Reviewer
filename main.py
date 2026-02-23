@@ -182,6 +182,33 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_pronouns(filepath, line, line_number, report):
+    """
+    Detect first-person pronouns.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    for lang, patterns in PRONOUNS.items():  # Iterate through each language and its pronoun patterns
+        for pattern in patterns:  # Iterate through each pronoun pattern
+            match = re.search(pattern, line)  # Search for the pronoun pattern in the line
+            if match:  # If a pronoun is found in the line
+                report["pronouns"].append(
+                    {
+                        "file": str(filepath),
+                        "line": line_number,
+                        "pattern": pattern,
+                        "matched_text": match.group(0),
+                        "context": line.strip(),
+                        "auto_fixable": False,
+                    }
+                )  # Add the pronoun occurrence to the report with relevant details
+
+
 def fix_missing_section_labels(filepath, lines, line_index, report):
     """
     Fix sectioning commands that do not have a following \\label{} by automatically
