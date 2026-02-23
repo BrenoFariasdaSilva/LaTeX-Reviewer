@@ -182,6 +182,23 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def uniq_preserve_order(items):
+    """
+    Return items with duplicates removed preserving order.
+
+    :param items: Iterable of items
+    :return: List of unique items preserving order
+    """
+
+    seen = set()  # Track seen items
+    out = []  # Output list preserving order
+    for it in items:  # Iterate over input items
+        if it not in seen:  # If item not seen before
+            seen.add(it)  # Mark item as seen
+            out.append(it)  # Append item to output preserving order
+    return out  # Return the deduplicated list preserving order
+
+
 def replacement_preserve_case(m, right):
     """
     Replacement function for regex that preserves the case of the original word.
