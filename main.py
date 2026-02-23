@@ -182,6 +182,77 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def fix_itemize_punctuation(filepath, lines, report):
+    """
+    Fix punctuation consistency inside itemize environments.
+
+    Rules:
+    - Every \\item ends with ';'
+    - Last \\item ends with '.'
+    - Works with commented itemize environments
+    - Preserves indentation, spacing, and comment markers
+
+    :param filepath: Path to the .tex file
+    :param lines: List of file lines
+    :param report: Dictionary accumulating the report data
+    :return: Tuple (possibly modified lines, modification flag)
+    """
+
+    BEGIN_ITEMIZE = re.compile(r"^(\s*)%?\s*\\begin\{itemize\}")  # Match begin{itemize}, commented or not
+    END_ITEMIZE = re.compile(r"^(\s*)%?\s*\\end\{itemize\}")  # Match end{itemize}, commented or not
+    ITEM_PATTERN = re.compile(r"^(\s*)(%?\s*\\item\s+)(.*?)(\s*)$")  # Match any \item, commented or not
+
+    in_itemize = False  # Flag indicating if we are inside an itemize environment
+    item_lines = []  # List of line indices for \item lines
+    modified = False  # Flag to track if any modifications were made
+
+    for i, line in enumerate(lines):  # Iterate through each line
+        if BEGIN_ITEMIZE.search(line):  # Detect begin{itemize}, commented or not
+            in_itemize = True  # Set the flag to True
+            item_lines = []  # Reset the list of \item line indices
+            continue  # Continue to the next line
+
+        if END_ITEMIZE.search(line) and in_itemize:  # Detect end{itemize}, commented or not
+            for idx, line_no in enumerate(item_lines):  # Fix punctuation for all collected \item lines
+                original = lines[line_no].rstrip("\n")  # Get the original line content
+                match = ITEM_PATTERN.match(original)  # Match the \item line
+                
+                if not match:  # If the line does not match the \item pattern
+                    continue  # Skip to the next line
+
+                indent, prefix, content, trailing = match.groups()  # Extract groups
+
+                content = re.sub(r"[.;]\s*$", "", content)  # Remove existing punctuation
+
+                if idx < len(item_lines) - 1:  # Last item ends with ".", others with ";"
+                    content += ";"  # Add semicolon
+                else:  # Last item ends with a period
+                    content += "."  # Add period
+
+                new_line = f"{indent}{prefix}{content}{trailing}\n"  # Reconstruct the line
+
+                if new_line != lines[line_no]:  # If the line was modified
+                    lines[line_no] = new_line  # Update the line in the list
+                    modified = True  # Set the modified flag to True
+
+            if item_lines:  # If any \item lines were modified
+                report["itemize_punctuation"].append(  # Record that itemize punctuation was fixed
+                    {
+                        "file": str(filepath),
+                        "auto_fixable": True,
+                        "applied_fix": True,
+                    }
+                )  # End append
+
+            in_itemize = False  # Reset the flag
+            continue  # Continue to the next line
+
+        if in_itemize and ITEM_PATTERN.match(line):  # If inside itemize and line matches \item
+            item_lines.append(i)  # Collect the line index
+
+    return lines, modified  # Return the (possibly modified) lines and modification flag
+
+
 def fix_double_whitespace(filepath, line, line_number, report):
     """
     Fix multiple consecutive spaces in running text.
