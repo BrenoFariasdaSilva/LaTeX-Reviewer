@@ -133,6 +133,7 @@ logger = Logger(f"./Logs/{Path(__file__).stem}.log", clean=True)  # Create a Log
 sys.stdout = logger  # Redirect stdout to the logger
 sys.stderr = logger  # Redirect stderr to the logger
 
+
 # Sound Constants:
 SOUND_COMMANDS = {
     "Darwin": "afplay",
@@ -141,10 +142,12 @@ SOUND_COMMANDS = {
 }  # The commands to play a sound for each operating system
 SOUND_FILE = "./.assets/Sounds/NotificationSound.wav"  # The path to the sound file
 
+
 # RUN_FUNCTIONS:
 RUN_FUNCTIONS = {
     "Play Sound": True,  # Set to True to play a sound when the program finishes
 }
+
 
 # Functions Definitions:
 
