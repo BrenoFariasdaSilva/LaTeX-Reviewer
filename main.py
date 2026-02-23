@@ -182,6 +182,63 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def analyze_pdf(report):
+    """
+    Analyze the compiled PDF for rendered-output issues.
+
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if not verify_filepath_exists(PDF_FILE):  # If the PDF does not exist
+        return  # Skip PDF analysis safely
+
+    with open(PDF_FILE, "rb") as file:  # Open the PDF in binary mode
+        content = file.read().decode(errors="ignore")  # Decode safely for pattern matching
+
+    if "??" in content:  # Detect unresolved references in rendered output
+        report["unresolved_references"].append(
+            {
+                "file": PDF_FILE,
+                "line": None,
+                "column": None,
+                "matched_text": "??",
+                "auto_fixable": False,
+            }
+        )  # Add the unresolved reference occurrence to the report with relevant details
+
+    if "((" in content:  # Detect repeated left parentheses
+        report["repeated_left_parentheses"].append(
+            {
+                "file": PDF_FILE,
+                "line": None,
+                "column": None,
+                "matched_text": "((",
+                "auto_fixable": False,
+            }
+        )  # Add the repeated parentheses occurrence to the report with relevant details
+
+    if "))" in content:  # Detect repeated right parentheses
+        report["repeated_right_parentheses"].append(
+            {
+                "file": PDF_FILE,
+                "line": None,
+                "column": None,
+                "matched_text": "))",
+                "auto_fixable": False,
+            }
+        )  # Add the repeated parentheses occurrence to the report with relevant details
+
+    if r"\gls{" in content:  # Heuristic indication of glossary misuse
+        report["glossary_plural"].append(
+            {
+                "file": PDF_FILE,
+                "line": None,
+                "auto_fixable": False,
+            }
+        )  # Add a generic entry indicating potential glossary plural misuse in the rendered output
+
+
 def collect_tex_files(root_path):
     """
     Collect all .tex files under the given root path.
