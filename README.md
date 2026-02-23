@@ -1,6 +1,6 @@
 <div align="center">
   
-# [LaTeX-Reviewer.](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer) <img src=""  width="3%" height="3%">
+# [LaTeX-Reviewer.](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer) <img src="https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/blob/e615fe5f90db842738521d75ae2738781348f2b8/.assets/Icons/LaTeX.png"  width="3%" height="3%">
 
 </div>
 
