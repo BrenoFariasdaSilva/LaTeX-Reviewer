@@ -182,6 +182,70 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_numeric_consistency(filepath, line, line_number, report):
+    """
+    Detect numeric usage consistency.
+
+    Verifies for:
+    - Decimal separator usage (dot vs comma)
+    - Decimal precision consistency
+    - Mixed usage of decimals and percentages
+    - Mapping of numeric representations for later global analysis
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if re.match(r"\s*%", line):  # Ignore fully commented lines
+        return  # Skip analysis safely
+
+    decimal_pattern = re.compile(r"\b\d+[.,]\d+\b")  # Match decimal numbers using dot or comma: 1.23 | 10,5 | 0.75
+    decimals = decimal_pattern.findall(line)  # Find all decimal numbers in the line
+
+    for number in decimals:  # Iterate through each decimal number found
+        separator = "." if "." in number else ","  # Identify decimal separator used
+        precision = len(number.split(separator)[1])  # Count decimal places for precision
+
+        report["decimal_formatting"].append(  # Append decimal formatting info
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "value": number,
+                "separator": separator,
+                "auto_fixable": False,
+            }
+        )  # End append
+
+        report["decimal_precision"].append(  # Append decimal precision info
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "value": number,
+                "precision": precision,
+                "auto_fixable": False,
+            }
+        )  # End append
+
+    percentage_pattern = re.compile(r"\b\d+\s*\\%")  # Match percentages written correctly as: 25 \%
+    percentages = percentage_pattern.findall(line)  # Find percentage values
+
+    proportion_pattern = re.compile(r"\b0[.,]\d+\b")  # Match proportions written as decimals: 0.25 | 0,75
+    proportions = proportion_pattern.findall(line)  # Find decimal proportions
+
+    if percentages and proportions:  # If both representations are used in the same line
+        report["numeric_representation"].append(  # Record mixed numeric representation issue
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "issue": "mixed_decimal_and_percentage",
+                "auto_fixable": False,
+            }
+        )  # End append
+
+
 def fix_itemize_punctuation(filepath, lines, report):
     """
     Fix punctuation consistency inside itemize environments.
