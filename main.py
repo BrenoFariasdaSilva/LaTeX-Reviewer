@@ -213,6 +213,19 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def line_contains_label(line):
+    r"""
+    Return True if the provided line already contains a \label{...}.
+
+    :param line: Line content
+    :return: True if line contains a label, False otherwise
+    """
+
+    if re.search(r"\\label\s*\{[^}]+\}", line):  # If the line already contains a label, skip it safely
+        return True  # Return True when a label is present
+    return False  # Return False when no label is present
+
+
 def next_line_has_noncomment_label(lines, next_line_index):
     """
     Check whether the next line is present, not fully commented, and contains a label.
