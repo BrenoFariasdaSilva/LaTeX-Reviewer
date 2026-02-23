@@ -213,6 +213,29 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_repeated_left_parentheses_in_line(filepath, line, line_number, report):
+    """
+    Detect repeated opening parentheses in a single line and append to report.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+    
+    if "((" in line:  # If there are repeated opening parentheses in the line
+        report["repeated_left_parentheses"].append(  # Add the repeated parentheses occurrence to the report with relevant details
+            {
+                "file": str(filepath),  # File path where issue was found
+                "line": line_number,  # Line number where issue was found
+                "column": line.find("((") + 1,  # Column index (1-based) of the match
+                "matched_text": line.strip(),  # The matched line context
+                "auto_fixable": False,  # Not auto-fixable
+            }
+        )  # End append
+
+
 def detect_repeated_right_parentheses_in_line(filepath, line, line_number, report):
     """
     Detect repeated closing parentheses in a single line and append to report.
