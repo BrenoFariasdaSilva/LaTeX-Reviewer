@@ -213,6 +213,26 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def analyze_pdf(report):
+    """
+    Analyze the compiled PDF for rendered-output issues.
+
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if not verify_filepath_exists(PDF_FILE):  # If the PDF does not exist
+        return  # Skip PDF analysis safely
+
+    with open(PDF_FILE, "rb") as file:  # Open the PDF in binary mode
+        content = file.read().decode(errors="ignore")  # Decode safely for pattern matching
+
+    detect_unresolved_in_pdf(content, report, PDF_FILE)  # Detect unresolved references in rendered output
+    detect_repeated_left_parentheses_in_pdf(content, report, PDF_FILE)  # Detect repeated left parentheses
+    detect_repeated_right_parentheses_in_pdf(content, report, PDF_FILE)  # Detect repeated right parentheses
+    detect_glossary_plural_in_pdf(content, report, PDF_FILE)  # Heuristic indication of glossary misuse in rendered output
+
+
 def collect_tex_files(root_path):
     """
     Collect all .tex files under the given root path.
