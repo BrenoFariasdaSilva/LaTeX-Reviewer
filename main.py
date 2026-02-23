@@ -213,6 +213,23 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def split_code_and_comment(line):
+    """
+    Split a LaTeX line into code and comment parts.
+
+    :param line: The original line from the file
+    :return: Tuple (code_part, comment)
+    """
+
+    if "%" in line:  # Split off LaTeX comments — do not touch commented text
+        code_part, comment_part = line.split("%", 1)  # Separate code and comment sections
+        comment = "%" + comment_part  # Preserve comment with leading '%'
+    else:
+        code_part = line  # No inline comment present
+        comment = ""  # Empty comment string
+    return code_part, comment  # Return code and comment parts
+
+
 def apply_safe_replacements(filepath, line_number, report, code_part, original_line):
     """
     Apply safe replacements from SAFE_SPELL_FIXES and record the change in report.
