@@ -86,6 +86,7 @@ VERBOSE = False  # Set to True to output verbose messages
 ROOT_PATH = f"./Input/SBC Paper/"  # Root directory of the LaTeX project
 PDF_FILE = f"{ROOT_PATH}main.pdf"  # Compiled PDF used for rendered-output verifications
 BIBTEX_FILE = f"{ROOT_PATH}main.bib"  # Compiled PDF used for rendered-output verifications
+GLOSSARY_FILE = f"{ROOT_PATH}entradas-siglas.tex"  # Glossary file used for glossary term verifications
 OUTPUT_REPORT = f"{ROOT_PATH}latex_review_report.json"  # JSON report output path
 
 
