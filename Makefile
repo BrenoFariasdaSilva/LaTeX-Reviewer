@@ -66,9 +66,9 @@ generate_requirements: $(VENV)
 
 # Run the repository installer script (makes it executable and runs it)
 install:
-	@echo "Running install_requirements.sh"
-	@chmod +x ./install_requirements.sh || true
-	@./install_requirements.sh
+	@echo "Running install_dependencies.sh"
+	@chmod +x ./install_dependencies.sh || true
+	@./install_dependencies.sh
 
 # Clean artifacts
 clean:
