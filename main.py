@@ -1694,6 +1694,34 @@ def create_arg_parser():
     return parser  # Return configured ArgumentParser instance
 
 
+def apply_cli_overrides(args):
+    """
+    Apply parsed CLI arguments to module-level configuration.
+
+    :param args: Parsed CLI arguments
+    :return: None
+    """
+
+    global VERBOSE, ROOT_PATH, PDF_FILE, BIBTEX_FILE, GLOSSARY_FILE, OUTPUT_REPORT  # Declare module-level configuration variables as global
+
+    if args is None: return  # Exit early if no arguments were provided
+
+    if getattr(args, "verbose", False): VERBOSE = True  # Enable verbose mode if flag is set
+
+    if getattr(args, "root_path", None) is not None: ROOT_PATH = args.root_path  # Override ROOT_PATH if provided
+
+    if getattr(args, "pdf_file", None) is not None: PDF_FILE = args.pdf_file  # Override PDF_FILE if explicitly provided
+    elif getattr(args, "root_path", None) is not None: PDF_FILE = f"{ROOT_PATH}main.pdf"  # Derive PDF_FILE from ROOT_PATH if only root was overridden
+
+    if getattr(args, "bibtex_file", None) is not None: BIBTEX_FILE = args.bibtex_file  # Override BIBTEX_FILE if explicitly provided
+    elif getattr(args, "root_path", None) is not None: BIBTEX_FILE = f"{ROOT_PATH}main.bib"  # Derive BIBTEX_FILE from ROOT_PATH if only root was overridden
+
+    if getattr(args, "glossary_file", None) is not None: GLOSSARY_FILE = args.glossary_file  # Override GLOSSARY_FILE if explicitly provided
+    elif getattr(args, "root_path", None) is not None: GLOSSARY_FILE = f"{ROOT_PATH}entradas-siglas.tex"  # Derive GLOSSARY_FILE from ROOT_PATH if only root was overridden
+
+    OUTPUT_REPORT = f"{ROOT_PATH}latex_review_report.json"  # Update OUTPUT_REPORT path based on final ROOT_PATH
+
+
 if __name__ == "__main__":
     """
     This is the standard boilerplate that calls the main() function.
@@ -1703,5 +1731,6 @@ if __name__ == "__main__":
 
     parser = create_arg_parser()  # Create the argument parser for CLI overrides
     args = parser.parse_args()  # Parse the command-line arguments
+    apply_cli_overrides(args)  # Apply any CLI overrides to the configuration variables
 
     main()  # Call the main function
