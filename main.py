@@ -213,6 +213,37 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_numeric_consistency(filepath, line, line_number, report):
+    """
+    Detect numeric usage consistency.
+
+    Verifies for:
+    - Decimal separator usage (dot vs comma)
+    - Decimal precision consistency
+    - Mixed usage of decimals and percentages
+    - Mapping of numeric representations for later global analysis
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if re.match(r"\s*%", line):  # Ignore fully commented lines
+        return  # Skip analysis safely
+
+    decimals = extract_decimals_from_line(line)  # Find decimal numbers in the line
+
+    for number in decimals:  # Iterate through each decimal number found
+        append_decimal_reports(filepath, line_number, report, number)  # Append formatting and precision entries for this number
+
+    percentages, proportions = find_percentages_and_proportions(line)  # Detect percentages and proportions in the line
+
+    if percentages and proportions:  # If both representations are used in the same line
+        append_mixed_numeric_representation(report, filepath, line_number)  # Record mixed numeric representation issue
+
+
 def is_begin_itemize_line(line):
     """
     Return True if the provided line marks the beginning of an itemize environment.
