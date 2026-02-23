@@ -213,6 +213,37 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_missing_bib_entries(filepath, line, line_number, bib_keys, report):
+    """
+    Detect \\cite{...} usages whose keys are not present in the provided bib_keys set.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param bib_keys: set of keys from .bib
+    :param report: report dict
+    :return: None
+    """
+
+    if re.match(r"^\s*%", line):  # Ignore fully commented lines
+        return  # Nothing to do for commented lines
+
+    for m in re.finditer(r"\\cite[a-zA-Z]*\s*\{([^}]+)\}", line):  # Match \cite-like commands: \cite, \citep, \citet, etc.
+        entry_text = m.group(1)  # Extract the citation keys content
+        for key in [k.strip() for k in entry_text.split(",") if k.strip()]:  # citations may be comma-separated
+            if key not in bib_keys:  # If key not found in provided bib keys
+                report["missing_bib_entries"].append(  # Append missing bib entry info to report
+                    {
+                        "file": str(filepath),
+                        "line": line_number,
+                        "key": key,
+                        "citation": m.group(0),
+                        "context": line.strip(),
+                        "auto_fixable": False,
+                    }
+                )  # End append
+
+
 def get_citation_keys(inner):
     r"""
     Extract citation keys from the inner content of a \cite{...} block.
