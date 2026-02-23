@@ -213,6 +213,41 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def append_decimal_reports(filepath, line_number, report, number):
+    """
+    Append decimal formatting and precision entries for a single numeric token.
+
+    :param filepath: Path to the .tex file
+    :param line_number: Line number where the number was found
+    :param report: Report dictionary to append entries to
+    :param number: The numeric string token to analyze
+    :return: None
+    """
+
+    separator = "." if "." in number else ","  # Identify decimal separator used
+    precision = len(number.split(separator)[1])  # Count decimal places for precision
+
+    report["decimal_formatting"].append(  # Append decimal formatting info
+        {
+            "file": str(filepath),  # File where the number was found
+            "line": line_number,  # Line number where the number was found
+            "value": number,  # The numeric token value
+            "separator": separator,  # The separator used in the token
+            "auto_fixable": False,  # Not auto-fixable
+        }
+    )  # End append
+
+    report["decimal_precision"].append(  # Append decimal precision info
+        {
+            "file": str(filepath),  # File where the number was found
+            "line": line_number,  # Line number where the number was found
+            "value": number,  # The numeric token value
+            "precision": precision,  # Number of decimal places
+            "auto_fixable": False,  # Not auto-fixable
+        }
+    )  # End append
+
+
 def find_percentages_and_proportions(line):
     """
     Find percentage and proportion patterns in a line.
