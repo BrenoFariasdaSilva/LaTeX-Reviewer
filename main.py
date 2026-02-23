@@ -213,6 +213,18 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def get_citation_keys(inner):
+    r"""
+    Extract citation keys from the inner content of a \cite{...} block.
+
+    :param inner: The raw inner string inside the braces of a citation
+    :return: List of individual citation keys (strings)
+    """
+
+    keys = [k.strip() for k in inner.split(",") if k.strip()]  # Split keys by commas and strip whitespace
+    return keys  # Return the list of keys
+
+
 def build_new_citation_and_line(full, inner, line):
     r"""
     Build a deduplicated citation replacement and the new line when duplicates exist.
