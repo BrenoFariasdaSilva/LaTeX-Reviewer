@@ -213,6 +213,26 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_glossary_plural_in_pdf(content, report, pdf_file):
+    """
+    Heuristic detection of glossary plural misuse in PDF content and append to report.
+
+    :param content: Decoded PDF content as string
+    :param report: Dictionary accumulating the report data
+    :param pdf_file: Path to the PDF file
+    :return: None
+    """
+    
+    if r"\gls{" in content:  # Heuristic indication of glossary misuse in the rendered output
+        report["glossary_plural"].append(  # Append a generic entry to indicate potential misuse
+            {
+                "file": pdf_file,  # The file path where the issue was found
+                "line": None,  # No line information for PDF-level checks
+                "auto_fixable": False,  # Indicate not auto-fixable
+            }
+        )  # End append
+
+
 def analyze_pdf(report):
     """
     Analyze the compiled PDF for rendered-output issues.
