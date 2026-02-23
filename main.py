@@ -213,6 +213,34 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def append_missing_section_label_report(report, filepath, line_number, command, heading_match, label_name, line):
+    """
+    Append a standardized missing section label entry into the report dictionary.
+
+    :param report: The report dictionary to append into
+    :param filepath: The file path where the issue was found
+    :param line_number: The 1-based line number of the heading
+    :param command: The sectioning command string (e.g. 'section' or 'subsection*')
+    :param heading_match: The regex match object for the heading
+    :param label_name: The generated label name to report
+    :param line: The original heading line text
+    :return: None
+    """
+
+    report["missing_section_label"].append(  # Append missing section label report entry
+        {
+            "file": str(filepath),  # The file path where the issue was found
+            "line": line_number,  # Line number where issue was found
+            "command": command,  # The command extracted
+            "matched_text": heading_match.group(0),  # The matched heading text
+            "context": line.strip(),  # The stripped line context
+            "generated_label": f"\\label{{sec:{label_name}}}",  # The generated label text
+            "auto_fixable": True,  # Mark as auto fixable
+            "applied_fix": True,  # Mark as applied
+        }
+    )  # End append
+
+
 def fix_missing_section_labels(filepath, lines, line_index, report):
     """
     Fix sectioning commands that do not have a following \\label{} by automatically
