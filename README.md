@@ -31,7 +31,7 @@ Automated reviewer for academic LaTeX projects that detects common writing, form
 
 <div align="center">
   
-![RepoBeats Statistics](RepoBeats-SVG-URL "Repobeats analytics image")
+![RepoBeats Statistics](https://repobeats.axiom.co/api/embed/cf02a5289d0c91ccb0328f0ac0d5adbad3e33f1e.svg "Repobeats analytics image")
 
 </div>
 
