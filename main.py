@@ -213,6 +213,28 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def detect_apostrophes(filepath, line, line_number, report):
+    """
+    Detect improper apostrophe usage.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if "'" in line and not ("``" in line or "''" in line):  # If there are apostrophes in the line not part of quotes
+        report["apostrophes"].append(  # Record apostrophe occurrence
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "matched_text": line.strip(),
+                "auto_fixable": False,
+            }
+        )  # End append
+
+
 def extract_decimals_from_line(line):
     """
     Extract decimal numbers from a line using configured regex.
