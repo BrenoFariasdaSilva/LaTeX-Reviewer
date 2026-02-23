@@ -213,6 +213,38 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def process_double_whitespace_and_report(filepath, line_number, report, indent, content, original_line):
+    """
+    Process content for multiple consecutive spaces, update report and return new line.
+
+    :param filepath: Path to the .tex file
+    :param line_number: Line number where content was found
+    :param report: Report dictionary to append entries to
+    :param indent: Leading indentation string
+    :param content: Content part of the line without indentation
+    :param original_line: The original full line for context
+    :return: Tuple (new_line or None, modified_flag)
+    """
+
+    if re.search(r"[^ \t]  +", content):  # If there are multiple consecutive spaces in the content
+        fixed_content = re.sub(r" {2,}", " ", content)  # Replace multiple spaces with a single space
+        if fixed_content != content:  # If the content was modified
+            new_line = indent + fixed_content  # Reconstruct the line with original indentation
+            report["double_whitespace"].append(  # Append double-whitespace fix to report
+                {
+                    "file": str(filepath),  # File where fix was applied
+                    "line": line_number,  # Line number where fix was applied
+                    "before": original_line.rstrip("\n"),  # Original line before change
+                    "after": new_line.rstrip("\n"),  # New line after change
+                    "auto_fixable": True,  # Mark as auto-fixable
+                    "applied_fix": True,  # Mark as applied
+                }
+            )  # End append
+            return new_line, True  # Return the modified line and True
+
+    return None, False  # Return None and False when unchanged
+
+
 def fix_itemize_punctuation(filepath, lines, report):
     """
     Fix punctuation consistency inside itemize environments.
