@@ -213,6 +213,31 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def append_spell_suggestion(report, filepath, line_number, word, suggestion, original_line):
+    """
+    Append a suggestion entry into the report['spelling'] list.
+
+    :param report: Report dictionary
+    :param filepath: Path to file where suggestion was found
+    :param line_number: Line number for suggestion
+    :param word: Original word
+    :param suggestion: Suggested correction
+    :param original_line: Full original line for context
+    :return: None
+    """
+
+    report["spelling"].append(  # Append suggestion entry to report
+        {
+            "file": str(filepath),  # File path where suggestion occurred
+            "line": line_number,  # Line number for suggestion
+            "word": word,  # Original word
+            "suggestion": suggestion,  # Suggested correction
+            "context": original_line.strip(),  # Full line context
+            "auto_fixable": False,  # Suggestion is not auto-fixable
+        }
+    )  # End append
+
+
 def add_spell_suggestions(filepath, line_number, report, code_part, spell, original_line):
     """
     Use a SpellChecker to add suggestions to the report for unknown words.
