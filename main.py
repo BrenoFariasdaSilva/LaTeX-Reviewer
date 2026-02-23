@@ -213,6 +213,27 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def load_bibtex_keys(bibfile):
+    """
+    Load BibTeX entry keys from a .bib file.
+
+    :param bibfile: Path to .bib file
+    :return: set of keys (strings)
+    """
+
+    keys = set()  # Initialize empty set for bib keys
+    try:
+        with open(bibfile, "r", encoding="utf-8") as f:  # Open bib file for reading
+            content = f.read()  # Read the full .bib content
+    except Exception:
+        return keys  # Return empty set on error
+
+    for match in re.finditer(r"@\w+\s*\{\s*([^,\s]+)\s*,", content):  # Match @type{key,
+        keys.add(match.group(1))  # Add the matched key to the set
+
+    return keys
+
+
 def detect_missing_bib_entries(filepath, line, line_number, bib_keys, report):
     """
     Detect \\cite{...} usages whose keys are not present in the provided bib_keys set.
