@@ -298,8 +298,19 @@ def main():
         end="\n\n",
     )  # Output the welcome message
     start_time = datetime.datetime.now()  # Get the start time of the program
-    
-    # Implement logic here
+
+    report = initialize_report()  # Initialize the report dictionary
+    analyze_pdf(report)  # First Pass: Rendered-Output verifications (PDF)
+    tex_files = collect_tex_files(ROOT_PATH)  # Collect all .tex files under the root path
+
+    bib_keys = load_bibtex_keys(BIBTEX_FILE)  # Load BibTeX keys from the .bib file
+    spell = SpellChecker()  # Initialize the spell checker (this may take some time on first run due to loading dictionaries)
+
+    for tex_file in tex_files:  # Iterate through each .tex file
+        analyze_file(tex_file, report, bib_keys, spell)  # Analyze the file and update the report
+
+    with open(OUTPUT_REPORT, "w", encoding="utf-8") as file:  # Open the output report file for writing
+        json.dump(report, file, indent=3)  # Write the report dictionary to the JSON file
 
     finish_time = datetime.datetime.now()  # Get the finish time of the program
     print(
@@ -308,6 +319,7 @@ def main():
     print(
         f"\n{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}"
     )  # Output the end of the program message
+
     (
         atexit.register(play_sound) if RUN_FUNCTIONS["Play Sound"] else None
     )  # Register the play_sound function to be called when the program finishes
