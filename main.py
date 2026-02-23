@@ -661,6 +661,36 @@ def load_glossary_labels():
     return labels  # Return the set of glossary labels
 
 
+def verify_gls_usage_in_file(filepath, glossary_labels, report):
+    r"""
+    Verify that \gls{label} usages reference defined glossary labels.
+
+    :param filepath: Path to the .tex file to scan
+    :param glossary_labels: Set of labels loaded from GLOSSARY_FILE
+    :param report: Report dictionary to append findings to
+    :return: None
+    """
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:  # Open .tex file for reading
+            lines = f.readlines()  # Read all lines from the file
+    except Exception:
+        return  # Fail silently on file read error
+    for line_number, line in enumerate(lines, start=1):  # Iterate lines with 1-based numbering
+        for m in re.finditer(r"\\gls\{([^}]+)\}", line):  # Find all \gls{label} occurrences
+            label = m.group(1)  # Extract the label from the first argument
+            if label not in glossary_labels:  # If the label is not defined in glossary set
+                report.setdefault("missing_glossary_terms", []).append(  # Ensure key exists and append entry
+                    {
+                        "file": str(filepath),  # File path where undefined gls was found
+                        "line": line_number,  # Line number where occurrence was found
+                        "column": None,  # Column information not provided
+                        "matched_text": label,  # The unmatched label text
+                        "auto_fixable": False,  # Not auto-fixable
+                    }
+                )  # End append
+
+
 def detect_missing_bib_entries(filepath, line, line_number, bib_keys, report):
     """
     Detect \\cite{...} usages whose keys are not present in the provided bib_keys set.
@@ -1630,8 +1660,8 @@ def main():
     for tex_file in tex_files:  # Iterate through each .tex file
         analyze_file(tex_file, report, bib_keys, spell)  # Analyze the file and update the report
 
-    for tex_file in tex_files:  # Iterate through each .tex file
-        analyze_file(tex_file, report, bib_keys, spell)  # Analyze the file and update the report
+    for tex_file in tex_files:  # Iterate through each .tex file for glossary verification
+        verify_gls_usage_in_file(tex_file, glossary_labels, report)  # Verify \gls usages against loaded glossary labels
 
     with open(OUTPUT_REPORT, "w", encoding="utf-8") as file:  # Open the output report file for writing
         json.dump(report, file, indent=3)  # Write the report dictionary to the JSON file
