@@ -64,10 +64,16 @@ dependencies: $(VENV)
 generate_requirements: $(VENV)
 	$(PIP) freeze > requirements.txt
 
+# Run the repository installer script (makes it executable and runs it)
+install:
+	@echo "Running install_requirements.sh"
+	@chmod +x ./install_requirements.sh || true
+	@./install_requirements.sh
+
 # Clean artifacts
 clean:
 	rm -rf $(VENV) || rmdir /S /Q $(VENV) 2>nul
 	find . -type f -name '*.pyc' -delete || del /S /Q *.pyc 2>nul
 	find . -type d -name '__pycache__' -delete || rmdir /S /Q __pycache__ 2>nul
 
-.PHONY: all run clean dependencies generate_requirements
+.PHONY: all run clean dependencies generate_requirements install
