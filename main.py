@@ -213,6 +213,20 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def line_is_fully_commented(line):
+    """
+    Return True if the provided line is fully commented.
+
+    :param line: Line content
+    :return: True if line is fully commented, False otherwise
+    """
+
+    if re.match(r"^\s*%", line):  # If the line is fully commented, skip it safely
+        return True  # Return True when line is fully commented
+    
+    return False  # Return False when line is not fully commented
+
+
 def get_section_heading_match(line):
     """
     Return a regex match for sectioning commands in the provided line.
