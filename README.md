@@ -41,6 +41,7 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 - [LaTeX-Reviewer. ](#latex-reviewer-)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
+  - [Verifications](#verifications)
   - [Requirements](#requirements)
   - [Setup](#setup)
     - [Clone the repository](#clone-the-repository)
@@ -60,6 +61,28 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 Automatically detects and fixes common LaTeX writing and formatting issues in academic papers. The code operates directly on LaTeX source files (.tex) under a configured root path, preserves formatting and comments when making safe deterministic auto-fixes, and produces a machine-readable JSON report of findings and applied fixes.
 
 The implementation includes functions for file-system discovery of .tex sources, rendered-output heuristics against a compiled PDF, BibTeX key extraction, per-line analysis for a set of explicit checks, and in-place application of unambiguous fixes.
+
+## Verifications
+
+The implementation performs the following verifications (report key shown in parentheses) and documents whether the check modifies files or only reports findings:
+
+- **Unresolved references** (`unresolved_references`): detects `??` in `.tex` lines and in the compiled PDF; reports only.
+- **Repeated left parentheses** (`repeated_left_parentheses`) and **repeated right parentheses** (`repeated_right_parentheses`): detects occurrences of `((` and `))` in `.tex` lines and in the compiled PDF; reports only.
+- **First-person pronouns** (`pronouns`): detects configured pronoun regexes for English and Portuguese (pt-br) in non-commented source lines; reports only.
+- **Apostrophe issues** (`apostrophes`): detects common apostrophe problems in source lines; reports only.
+- **Decimal formatting** and **decimal precision** (`decimal_formatting`, `decimal_precision`): extracts decimal numbers from lines and reports formatting or precision inconsistencies; reports only.
+- **Double whitespace** (`double_whitespace`): detects consecutive intra-line whitespace; automatic in-place correction is applied when unambiguous.
+- **Glossary plural misuse** (`glossary_plural`): verifies `\gls{...}` usages against labels loaded from `entradas-siglas.tex`; reports mismatches and the code contains an auto-fix routine for certain plural cases (modifies files in-place when applied).
+- **Underscore misuse** (`underscore_misuse`): detects unescaped underscores in text and applies in-place fixes where safe.
+- **Percentage misuse** (`percentage_misuse`): detects improper percentage formatting and applies in-place fixes where safe.
+- **Missing section labels** (`missing_section_label`): detects section/chapter/subsection headings without a following `\label{}` and inserts a generated label of the form `\label{sec:<sanitized-title>}` on the next line; auto-fix applied in-place.
+- **Missing BibTeX entries** (`missing_bib_entries`): detects `\cite{...}` keys not present in the configured BibTeX file (`main.bib`); reports only.
+- **Mixed numeric representation** (`numeric_representation`): detects contexts with inconsistent numeric styles (digits versus words); reports only.
+- **Itemize punctuation** (`itemize_punctuation`): inspects `itemize` items for terminal punctuation consistency and performs deterministic in-place fixes when applicable.
+- **Duplicate citations** (`duplicate_citations`): deduplicates keys inside the same `\cite{...}` block and writes the corrected citation back to the file; auto-fix applied in-place.
+- **Spelling** (`spelling`): produces spelling suggestions via `SpellChecker`; suggestions are recorded in the report but are not automatically applied to source files.
+
+Where automatic corrections are applied the script preserves indentation and never modifies fully commented lines. The implementation also runs a small set of heuristic rendered-output checks against the compiled PDF (unresolved references, repeated parentheses, glossary indications) and records findings in the JSON report. All findings and any applied fixes are written to the JSON report at the `OUTPUT_REPORT` path. The script redirects `stdout`/`stderr` to the repository `Logger` and may register a platform-dependent sound callback on exit when enabled.
 
 ## Requirements
 
