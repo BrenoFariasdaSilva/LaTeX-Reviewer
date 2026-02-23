@@ -213,6 +213,22 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def get_section_heading_match(line):
+    """
+    Return a regex match for sectioning commands in the provided line.
+
+    :param line: Line content
+    :return: Match object or None
+    """
+
+    heading_match = re.search(r"\\(chapter|section|subsection|subsubsection)(\*?)\s*\{([^}]+)\}", line)  # Match sectioning commands with their titles
+    
+    if not heading_match:  # If there is no sectioning command in the line, return None
+        return None  # Return None when no heading match
+    
+    return heading_match  # Return the regex match when found
+
+
 def line_contains_label(line):
     r"""
     Return True if the provided line already contains a \label{...}.
