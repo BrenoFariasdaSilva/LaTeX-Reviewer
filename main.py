@@ -213,6 +213,17 @@ def initialize_report():
     }  # Return initialized empty report structure
 
 
+def is_ignored_by_safe_spell_fixes(lw):
+    """
+    Return True when the lowercased word is present in SAFE_SPELL_FIXES.
+
+    :param lw: Lowercased word to check
+    :return: True if word is in SAFE_SPELL_FIXES
+    """
+
+    return lw in SAFE_SPELL_FIXES  # Membership check against SAFE_SPELL_FIXES
+
+
 def get_spell_suggestion_safe(spell, lw):
     """
     Safely query the SpellChecker for a suggestion; return suggestion or None.
