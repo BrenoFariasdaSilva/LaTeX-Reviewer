@@ -165,3 +165,17 @@ Configuration notes (literal variables in the code):
 - `OUTPUT_REPORT` (default set to `f"{ROOT_PATH}latex_review_report.json"`) — path where the JSON report is written.
 
 If these values need changing, they must be edited in `main.py` before execution; the script contains no CLI flags or argument parsing.
+
+## Results
+
+The script writes a JSON report of findings to the path given by the `OUTPUT_REPORT` constant. With default constants the file written is:
+
+```
+./Input/SBC Paper/latex_review_report.json
+```
+
+Additional side effects performed by the implementation:
+
+- The script may modify `.tex` files in-place under `ROOT_PATH` when an auto-fix is applied (the code writes back modified files when any fix flag is set).
+- A log file is created by the repository-local `Logger` and the script redirects `sys.stdout` and `sys.stderr` to the `Logger` instance. The logger is instantiated with `"./Logs/{Path(__file__).stem}.log"`, which with the provided filename results in `./Logs/main.log`.
+- The script registers a sound-playing callback via `atexit.register(play_sound)` when `RUN_FUNCTIONS["Play Sound"]` is truthy; the `play_sound` function performs no action on Windows (it returns immediately) and otherwise attempts to run an OS-specific playback command if `SOUND_FILE` exists.
