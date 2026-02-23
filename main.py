@@ -80,11 +80,13 @@ class BackgroundColors:  # Colors for the terminal
 # Execution Constants:
 VERBOSE = False  # Set to True to output verbose messages
 
+
 # File Paths:
 ROOT_PATH = f"./Input/SBC Paper/"  # Root directory of the LaTeX project
 PDF_FILE = f"{ROOT_PATH}main.pdf"  # Compiled PDF used for rendered-output verifications
 BIBTEX_FILE = f"{ROOT_PATH}main.bib"  # Compiled PDF used for rendered-output verifications
 OUTPUT_REPORT = f"{ROOT_PATH}latex_review_report.json"  # JSON report output path
+
 
 # Regex Patterns:
 PRONOUNS = {
