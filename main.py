@@ -182,6 +182,40 @@ def verify_filepath_exists(filepath):
     return os.path.exists(filepath)  # Return True if the file or folder exists, False otherwise
 
 
+def detect_repeated_parentheses(filepath, line, line_number, report):
+    """
+    Detect repeated opening or closing parentheses.
+
+    :param filepath: Path to the .tex file
+    :param line: Line content
+    :param line_number: Line number
+    :param report: Dictionary accumulating the report data
+    :return: None
+    """
+
+    if "((" in line:  # If there are repeated opening parentheses in the line
+        report["repeated_left_parentheses"].append(
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "column": line.find("((") + 1,
+                "matched_text": line.strip(),
+                "auto_fixable": False,
+            }
+        )  # Add the repeated parentheses occurrence to the report with relevant details
+
+    if "))" in line:  # If there are repeated closing parentheses in the line
+        report["repeated_right_parentheses"].append(
+            {
+                "file": str(filepath),
+                "line": line_number,
+                "column": line.find("))") + 1,
+                "matched_text": line.strip(),
+                "auto_fixable": False,
+            }
+        )  # Add the repeated parentheses occurrence to the report with relevant details
+
+
 def detect_pronouns(filepath, line, line_number, report):
     """
     Detect first-person pronouns.
