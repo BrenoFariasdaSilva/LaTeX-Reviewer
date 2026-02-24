@@ -240,7 +240,7 @@ If you use the LaTeX-Reviewer in your research, please cite it using the followi
   author = {Breno Farias da Silva},
   year = {2026},
   howpublished = {https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer},
-  note = {Accessed on September 11, 2026}
+  note = {Accessed on February 23, 2026}
 }
 ```
 
