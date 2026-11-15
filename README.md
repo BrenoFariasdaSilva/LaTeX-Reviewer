@@ -28,7 +28,6 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 ![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/LaTeX-Reviewer)
 ![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/LaTeX-Reviewer)
 ![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/LaTeX-Reviewer.svg)
-[![GitHub Repository Size](https://img.shields.io/github/repo-size/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer)
 [![Open Issues](https://img.shields.io/github/issues/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues?q=is%3Aissue+is%3Aclosed)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/pulls)
