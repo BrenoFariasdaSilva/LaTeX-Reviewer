@@ -28,21 +28,6 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 ![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/LaTeX-Reviewer)
 ![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/LaTeX-Reviewer)
 ![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/LaTeX-Reviewer.svg)
-
-</div>
-
-<div align="center">
-
-![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Commits](https://img.shields.io/github/commit-activity/t/BrenoFariasdaSilva/LaTeX-Reviewer/main)
-![GitHub Last Commit](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Forks](https://img.shields.io/github/forks/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Language Count](https://img.shields.io/github/languages/count/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub License](https://img.shields.io/github/license/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Stars](https://img.shields.io/github/stars/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/LaTeX-Reviewer)
-![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/LaTeX-Reviewer)
-![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/LaTeX-Reviewer.svg)
 [![GitHub Repository Size](https://img.shields.io/github/repo-size/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer)
 [![Open Issues](https://img.shields.io/github/issues/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues?q=is%3Aissue+is%3Aclosed)
@@ -53,7 +38,6 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 ![Language](https://img.shields.io/badge/Language-Python-3776AB)
 ![Content](https://img.shields.io/badge/Content-LaTeX-008080)
 ![Feature](https://img.shields.io/badge/Feature-Static%20Checks-276749)
-
 ![Repobeats Statistics](https://repobeats.axiom.co/api/embed/cf02a5289d0c91ccb0328f0ac0d5adbad3e33f1e.svg)
 
 </div>
