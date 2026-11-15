@@ -32,10 +32,32 @@ Where the implementation defines deterministic, unambiguous fixes the script upd
 </div>
 
 <div align="center">
-  
-![RepoBeats Statistics](https://repobeats.axiom.co/api/embed/cf02a5289d0c91ccb0328f0ac0d5adbad3e33f1e.svg "Repobeats analytics image")
+
+![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Commits](https://img.shields.io/github/commit-activity/t/BrenoFariasdaSilva/LaTeX-Reviewer/main)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Forks](https://img.shields.io/github/forks/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Language Count](https://img.shields.io/github/languages/count/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub License](https://img.shields.io/github/license/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Stars](https://img.shields.io/github/stars/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Contributors](https://img.shields.io/github/contributors/BrenoFariasdaSilva/LaTeX-Reviewer)
+![GitHub Created At](https://img.shields.io/github/created-at/BrenoFariasdaSilva/LaTeX-Reviewer)
+![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/LaTeX-Reviewer.svg)
+[![GitHub Repository Size](https://img.shields.io/github/repo-size/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer)
+[![Open Issues](https://img.shields.io/github/issues/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues)
+[![Closed Issues](https://img.shields.io/github/issues-closed/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/issues?q=is%3Aissue+is%3Aclosed)
+[![Open Pull Requests](https://img.shields.io/github/issues-pr/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/pulls)
+[![Closed Pull Requests](https://img.shields.io/github/issues-pr-closed/BrenoFariasdaSilva/LaTeX-Reviewer)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/pulls?q=is%3Apr+is%3Aclosed)
+[![Monthly Commits](https://img.shields.io/github/commit-activity/m/BrenoFariasdaSilva/LaTeX-Reviewer/main)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/commits)
+[![Merged PRs](https://img.shields.io/github/issues-search/BrenoFariasdaSilva/LaTeX-Reviewer?query=is%3Apr%20is%3Amerged&label=merged%20PRs&color=blue)](https://github.com/BrenoFariasdaSilva/LaTeX-Reviewer/pulls?q=is%3Apr+is%3Amerged)
+![Language](https://img.shields.io/badge/Language-Python-3776AB)
+![Content](https://img.shields.io/badge/Content-LaTeX-008080)
+![Feature](https://img.shields.io/badge/Feature-Static%20Checks-276749)
+
+![Repobeats Statistics](https://repobeats.axiom.co/api/embed/cf02a5289d0c91ccb0328f0ac0d5adbad3e33f1e.svg)
 
 </div>
+
 
 ## Table of Contents
 - [LaTeX-Reviewer. ](#latex-reviewer-)
